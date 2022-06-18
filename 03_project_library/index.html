@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project: Library</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header"><h1>Library</h1></div>
+      <div class="btnContainer">
+        <button type="button" id="btnBook">Add new book</button>
+      </div>
+      <div class="form-popup">
+        <form action="" method="post">
+          <label for="book_title">Book Title:</label>
+          <input type="text" id="book_title" name="book_title" />
+          <label for="book_author">Book Author:</label>
+          <input type="text" id="book_author" name="book_author" />
+          <label for="book_pages">Book Pages:</label>
+          <input type="number" id="book_author" name="book_pages" />
+          <label for="book_read">Did you read this book?</label>
+          <input type="radio" id="book_author" name="book_pages" />
+        </form>
+      </div>
+      <div class="main">
+        <div class="card">
+          <div class="card-title">title</div>
+          <div class="card-author">author</div>
+          <div class="card-pages">pages</div>
+          <div class="card-footer">
+            <div class="card-didRead">ive read it</div>
+            <div class="card-icons">
+              <div class="card-icon-delete">
+                <img src="img/trash-can-outline.png" alt="" />
+              </div>
+              <div class="card-icon-toggle">
+                <img src="img/check.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+          ultricies est ultricies imperdiet aliquet. Aliquam feugiat
+          sollicitudin dolor, nec pellentesque tortor lacinia ac. Ut quis est
+          arcu. Nam volutpat non turpis nec ultrices. Sed sed quam in diam
+          iaculis volutpat. Praesent elementum varius vestibulum. Cras
+          ullamcorper, diam id pulvinar posuere, nunc elit condimentum lorem,
+          vel aliquam nunc urna non lacus. Interdum et malesuada fames ac ante
+          ipsum primis in faucibus. Fusce maximus, dui vitae pharetra feugiat,
+          justo leo laoreet tortor, a sagittis nisi augue mollis massa.
+        </div>
+      </div>
+    </div>
+    <script src="js.js"></script>
+  </body>
+</html>
