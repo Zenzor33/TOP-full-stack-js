@@ -14,12 +14,15 @@ body {
   padding: 10px;
   padding-top: 25px;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-width: 80%;
   gap: 25px;
 }
 
 .card {
-  width: clamp(100px, 50%, 300px);
+  min-width: 200px;
+  max-width: 600px;
   background-color: lightblue;
   border: 2px solid white;
   border-radius: 20px;
@@ -28,6 +31,7 @@ body {
   grid-template-columns: repeat(1, auto);
   grid-template-rows: repeat(4, auto);
   justify-items: center;
+  min-height: 300px;
 }
 
 .card-icons {
@@ -61,4 +65,8 @@ body {
   background-color: white;
   padding: 10px 15px;
   /* opacity: 50%; */
+}
+
+.form-popup.hidden {
+  display: none;
 }

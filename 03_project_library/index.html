@@ -13,25 +13,40 @@
       <div class="btnContainer">
         <button type="button" id="btnBook">Add new book</button>
       </div>
-      <div class="form-popup">
-        <form action="" method="post">
+      <div class="form-popup hidden">
+        <form action="" method="post" name="book_form">
           <label for="book_title">Book Title:</label>
-          <input type="text" id="book_title" name="book_title" />
+          <input type="text" id="book_title" name="book_title" autofocus />
           <label for="book_author">Book Author:</label>
           <input type="text" id="book_author" name="book_author" />
           <label for="book_pages">Book Pages:</label>
-          <input type="number" id="book_author" name="book_pages" />
-          <label for="book_read">Did you read this book?</label>
-          <input type="radio" id="book_author" name="book_pages" />
+          <input type="number" id="book_pages" name="book_pages" />
+          <div>
+            <div>Did you read this book?</div>
+            <label for="book_read">Yes</label>
+            <input
+              type="radio"
+              id="book_read_yes"
+              name="book_read"
+              value="yes"
+              checked
+            />
+            <label for="book_read">No</label>
+            <input type="radio" id="book_read_no" name="book_read" value="no" />
+          </div>
+          <div>
+            <button type="submit" id="btnSubmit">Submit</button>
+            <button type="button" id="btnCancel">Cancel</button>
+          </div>
         </form>
       </div>
       <div class="main">
         <div class="card">
-          <div class="card-title">title</div>
-          <div class="card-author">author</div>
-          <div class="card-pages">pages</div>
+          <div class="card-title">Sample Title</div>
+          <div class="card-author">Sample Author</div>
+          <div class="card-pages">Sample Pages</div>
           <div class="card-footer">
-            <div class="card-didRead">ive read it</div>
+            <div class="card-didRead">I've read it</div>
             <div class="card-icons">
               <div class="card-icon-delete">
                 <img src="img/trash-can-outline.png" alt="" />
@@ -41,17 +56,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="card">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-          ultricies est ultricies imperdiet aliquet. Aliquam feugiat
-          sollicitudin dolor, nec pellentesque tortor lacinia ac. Ut quis est
-          arcu. Nam volutpat non turpis nec ultrices. Sed sed quam in diam
-          iaculis volutpat. Praesent elementum varius vestibulum. Cras
-          ullamcorper, diam id pulvinar posuere, nunc elit condimentum lorem,
-          vel aliquam nunc urna non lacus. Interdum et malesuada fames ac ante
-          ipsum primis in faucibus. Fusce maximus, dui vitae pharetra feugiat,
-          justo leo laoreet tortor, a sagittis nisi augue mollis massa.
         </div>
       </div>
     </div>

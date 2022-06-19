@@ -15,37 +15,96 @@ Book.prototype.info = function () {
   } pages, is ${didRead()}`;
 };
 
-// Sample books. Delete later
-const expanse = new Book("The Expanse", "dr.someone", 350, "y");
-const oldMansWar = new Book("Old Man's War", "Scalzi", "300", "n");
+const arr = [];
 
-// add a function to the script (not the constructor) that can take user’s input and store the new book objects into an array.
-function addBookToLibrary(book) {
+const btnSubmit = document.querySelector("#btnSubmit");
+btnSubmit.addEventListener("click", createBook);
+
+const btnAddNewBook = document.querySelector("#btnBook");
+btnAddNewBook.addEventListener("click", () => {
+  popup = document.querySelector(".form-popup");
+  popup.classList.remove("hidden");
+});
+
+const btnCancel = document.querySelector("#btnCancel");
+btnCancel.addEventListener("click", resetAndClosePopup);
+
+function createBook(e) {
+  e.preventDefault();
+
+  book_title = document.forms["book_form"].elements["book_title"].value;
+  book_author = document.forms["book_form"].elements["book_author"].value;
+  book_pages = document.forms["book_form"].elements["book_pages"].value;
+  book_read = document.forms["book_form"].elements["book_read"].value;
+
+  let book = new Book(book_title, book_author, book_pages, book_read);
   myLibrary.push(book);
+  createCard(book_title, book_author, book_pages, book_read);
+  resetAndClosePopup();
 }
 
-// Sample inputs. Delete later.
-addBookToLibrary(expanse);
-addBookToLibrary(oldMansWar);
-
-// Add a “NEW BOOK” button that brings up a form allowing users to input the details for the new book: author, title, number of pages, whether it’s been read and anything else you might want.
-
-const btnNewBook = document.querySelector("#btnBook");
-btnNewBook.addEventListener("click", createForm);
-
-function createForm(e) {
-  console.log(e);
-  console.log("proceed");
+function resetAndClosePopup() {
+  popup = document.querySelector(".form-popup");
+  popup.classList.add("hidden");
+  book_form.reset();
 }
 
-// ----------------------
+function createCard(book_title, book_author, book_pages, book_read) {
+  const divMain = document.querySelector(".main");
+  const divCard = document.createElement("div");
+  divCard.classList.add("card");
+  divMain.appendChild(divCard);
 
-// Add a button on each book’s display to change its read status.
+  const divCardTitle = document.createElement("div");
+  divCardTitle.classList.add("card-title");
+  divCard.appendChild(divCardTitle);
+  let newContent = document.createTextNode(book_title);
+  divCardTitle.appendChild(newContent);
 
-// add event listener to card-icon-toggle div
-/* the callback function should:
-1) Toggle text of read div
-2) Optional: change something in the image div to indicate status
-*/
+  const divCardAuthor = document.createElement("div");
+  divCardAuthor.classList.add("card-author");
+  divCard.appendChild(divCardAuthor);
+  newContent = document.createTextNode(book_author);
+  divCardAuthor.appendChild(newContent);
 
-// To facilitate this you will want to create the function that toggles a book’s read status on your Book prototype instance.
+  const divCardPages = document.createElement("div");
+  divCardPages.classList.add("card-pages");
+  divCard.appendChild(divCardPages);
+  newContent = document.createTextNode(book_pages);
+  divCardPages.appendChild(newContent);
+
+  const divCardFooter = document.createElement("div");
+  divCardFooter.classList.add("card-footer");
+  divCard.appendChild(divCardFooter);
+
+  const divCardDidRead = document.createElement("div");
+  divCardDidRead.classList.add("card-didRead");
+  divCardFooter.appendChild(divCardDidRead);
+  if (book_read === "yes") {
+    newContent = document.createTextNode("I've read it");
+    divCardDidRead.appendChild(newContent);
+  } else if (book_read === "no") {
+    newContent = document.createTextNode("I've not read it");
+    divCardDidRead.appendChild(newContent);
+  } else {
+    console.log("error at book_read y/n");
+  }
+
+  const divCardIcons = document.createElement("div");
+  divCardIcons.classList.add("card-icons");
+  divCardFooter.appendChild(divCardIcons);
+
+  const divCardIcon1 = document.createElement("div");
+  divCardIcon1.classList.add("card-icon-delete");
+  divCardIcons.appendChild(divCardIcon1);
+  const imgDel = document.createElement("img");
+  imgDel.setAttribute("src", "img/trash-can-outline.png");
+  divCardIcon1.appendChild(imgDel);
+
+  const divCardIcon2 = document.createElement("div");
+  divCardIcon2.classList.add("card-icon-toggle");
+  divCardIcons.appendChild(divCardIcon2);
+  const imgToggle = document.createElement("img");
+  imgToggle.setAttribute("src", "img/check.png");
+  divCardIcon1.appendChild(imgToggle);
+}
