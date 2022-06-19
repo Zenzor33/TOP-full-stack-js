@@ -35,6 +35,7 @@ function createBook(e) {
   book_title = document.forms["book_form"].elements["book_title"].value;
   book_author = document.forms["book_form"].elements["book_author"].value;
   book_pages = document.forms["book_form"].elements["book_pages"].value;
+  // BUG. BOOK_READ needs BOOLEAN value
   book_read = document.forms["book_form"].elements["book_read"].value;
 
   let book = new Book(book_title, book_author, book_pages, book_read);
