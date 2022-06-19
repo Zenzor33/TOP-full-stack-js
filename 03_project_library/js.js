@@ -80,6 +80,7 @@ function createCard(book_title, book_author, book_pages, book_read) {
 
   const divCardDidRead = document.createElement("div");
   divCardDidRead.classList.add("card-didRead");
+  divCardDidRead.id = `${book_title}-read`;
   divCardFooter.appendChild(divCardDidRead);
   if (book_read === "yes") {
     newContent = document.createTextNode("I've read it");
@@ -114,5 +115,19 @@ function createCard(book_title, book_author, book_pages, book_read) {
   divCardIcons.appendChild(divCardIcon2);
   const imgToggle = document.createElement("img");
   imgToggle.setAttribute("src", "img/check.png");
-  divCardIcon1.appendChild(imgToggle);
+  divCardIcon2.appendChild(imgToggle);
+
+  divCardIcon2.addEventListener("click", function () {
+    // select the textnode
+    const strRead = document.getElementById(`${book_title}-read`);
+    const indexOfTitle = myLibrary
+      .map((object) => object.title)
+      .indexOf(book_title);
+    // toggle the textnode
+    if (strRead.textContent === "I've read it") {
+      strRead.textContent = "I've not read it";
+    }
+    // select the array
+    // toggle the array
+  });
 }
