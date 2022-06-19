@@ -53,6 +53,7 @@ function createCard(book_title, book_author, book_pages, book_read) {
   const divMain = document.querySelector(".main");
   const divCard = document.createElement("div");
   divCard.classList.add("card");
+  divCard.id = book_title;
   divMain.appendChild(divCard);
 
   const divCardTitle = document.createElement("div");
@@ -96,6 +97,13 @@ function createCard(book_title, book_author, book_pages, book_read) {
 
   const divCardIcon1 = document.createElement("div");
   divCardIcon1.classList.add("card-icon-delete");
+  divCardIcon1.addEventListener("click", function () {
+    let index = myLibrary.map((object) => object.title).indexOf(book_title);
+    myLibrary.splice(index, 1);
+
+    const element = document.getElementById(book_title);
+    element.remove();
+  });
   divCardIcons.appendChild(divCardIcon1);
   const imgDel = document.createElement("img");
   imgDel.setAttribute("src", "img/trash-can-outline.png");
