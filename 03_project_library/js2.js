@@ -30,7 +30,7 @@ function Book(title, author, numPages, read, id) {
   this.id = id;
 }
 
-Book.prototype.createCard = function () {
+Book.prototype.createCard = function (identifier) {
   const divMain = document.querySelector(".main");
   const divCard = document.createElement("div");
   divCard.classList.add("card");
@@ -61,6 +61,7 @@ Book.prototype.createCard = function () {
 
   const divCardDidRead = document.createElement("div");
   divCardDidRead.classList.add("card-didRead");
+  divCardDidRead.setAttribute("data-didRead", `${this.id}`);
 
   // refactor later
   divCardFooter.appendChild(divCardDidRead);
@@ -78,31 +79,55 @@ Book.prototype.createCard = function () {
   divCardIcons.classList.add("card-icons");
   divCardFooter.appendChild(divCardIcons);
 
-  // delete button
+  // the delete button
+  // global variable 'eventId' is bad practice?
   const divCardIcon1 = document.createElement("div");
   divCardIcon1.classList.add("card-icon-delete");
-  divCardIcon1.addEventListener("click", something);
+
+  let eventId = this.id;
+  divCardIcon1.addEventListener("click", function () {
+    let index = myLibrary.map((object) => object.id).indexOf(eventId);
+    myLibrary.splice(index, 1);
+
+    let cardElement = document.getElementById(eventId);
+    console.log(eventId);
+
+    cardElement.remove();
+  });
+
   divCardIcons.appendChild(divCardIcon1);
   const imgDel = document.createElement("img");
   imgDel.setAttribute("src", "img/trash-can-outline.png");
   divCardIcon1.appendChild(imgDel);
+
+  const divCardIcon2 = document.createElement("div");
+  divCardIcon2.classList.add("card-icon-toggle");
+  divCardIcons.appendChild(divCardIcon2);
+  const imgToggle = document.createElement("img");
+  imgToggle.setAttribute("src", "img/check.png");
+  divCardIcon2.appendChild(imgToggle);
+
+  divCardIcon2.addEventListener("click", function () {
+    // select the textnode
+    const cardTextNode = document.querySelector(`[data-didread="${eventId}"]`);
+
+    // When button is clicked, change the id in the object
+    // After object is updated, write a function to update the text display.
+
+    const indexOfTitle = myLibrary.map((object) => object.id).indexOf(eventId);
+    let cardReadStatus = myLibrary[indexOfTitle].read;
+
+    if (cardReadStatus === "yes") {
+      myLibrary[indexOfTitle].read = "no";
+      cardTextNode.textContent = "I've not read it";
+    } else if (cardReadStatus === "no") {
+      myLibrary[indexOfTitle].read = "yes";
+      cardTextNode.textContent = "I've read it";
+    } else {
+      console.log("Error at divCardIcon2 (toggle button)");
+    }
+  });
 };
-
-function something(e) {
-  // change functionality. Function should search for the indexOf the object's matching identifier. Also delete the element of the matching identifier.
-
-  // The count variable can't be used. And the 'this' can't be used. I can find the parent element id, maybe.
-
-  //   let parentId =
-
-  let index = myLibrary.map((object) => object.id).indexOf(count);
-  myLibrary.splice(index, 1);
-
-  let cardElement = document.getElementById(count);
-  console.log(cardElement);
-
-  cardElement.remove();
-}
 
 function createBook(e) {
   e.preventDefault();
@@ -115,7 +140,7 @@ function createBook(e) {
 
   let book = new Book(book_title, book_author, book_pages, book_read, id);
   myLibrary.push(book);
-  book.createCard();
+  book.createCard(id);
   resetAndClosePopup();
 }
 
