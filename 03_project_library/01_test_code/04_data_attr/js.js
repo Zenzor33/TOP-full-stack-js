@@ -18,13 +18,35 @@ const counts = function () {
   return count;
 };
 
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, id) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
-  this.identifier = counts();
+  this.id = id;
 }
 
-const expanse = new Book("expanse", "someone", "35", "yes");
-const oldman = new Book("expanse", "someone", "35", "yes");
+Book.prototype.something = function () {
+  let newDiv = document.createElement("div");
+  const body = document.querySelector("body");
+  newDiv.setAttribute("data-id", `${this.id}`);
+  body.appendChild(newDiv);
+};
+
+// Add the HTML creation to the object's prototype?
+
+const expanse = new Book("expanse", "someone", "35", "yes", counts());
+expanse.something();
+const oldman = new Book("expanse", "someone", "35", "yes", counts());
+oldman.something();
+
+// let newDiv = document.createElement("div");
+// const body = document.querySelector("body");
+// newDiv.setAttribute("data-id", "1");
+// body.appendChild(newDiv);
+
+/* 
+// setting data-foo
+var el = document.querySelector('div');
+el.setAttribute('data-foo', 'Hello World!');
+*/
