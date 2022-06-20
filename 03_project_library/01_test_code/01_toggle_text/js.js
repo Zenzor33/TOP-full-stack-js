@@ -9,6 +9,7 @@ btnToggle.addEventListener("click", toggleText);
 
 function toggleText(e) {
   console.log(e);
+
   targetText.outerText = "changed";
 }
 

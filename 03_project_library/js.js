@@ -4,18 +4,16 @@ function Book(title, author, numPages, read) {
   this.title = title;
   this.author = author;
   this.numPages = numPages;
-  this.read = Boolean(read === "y");
+  this.read = read;
 }
 
-Book.prototype.info = function () {
-  const didRead = () => (this.read ? "READ" : "NOT READ");
+// Book.prototype.info = function () {
+//   const didRead = () => (this.read ? "READ" : "NOT READ");
 
-  return `${this.title} by ${this.author}, ${
-    this.numPages
-  } pages, is ${didRead()}`;
-};
-
-const arr = [];
+//   return `${this.title} by ${this.author}, ${
+//     this.numPages
+//   } pages, is ${didRead()}`;
+// };
 
 const btnSubmit = document.querySelector("#btnSubmit");
 btnSubmit.addEventListener("click", createBook);
@@ -35,7 +33,7 @@ function createBook(e) {
   book_title = document.forms["book_form"].elements["book_title"].value;
   book_author = document.forms["book_form"].elements["book_author"].value;
   book_pages = document.forms["book_form"].elements["book_pages"].value;
-  // BUG. BOOK_READ needs BOOLEAN value
+  // BUG
   book_read = document.forms["book_form"].elements["book_read"].value;
 
   let book = new Book(book_title, book_author, book_pages, book_read);
@@ -127,6 +125,10 @@ function createCard(book_title, book_author, book_pages, book_read) {
     // toggle the textnode
     if (strRead.textContent === "I've read it") {
       strRead.textContent = "I've not read it";
+      return;
+    } else if (strRead.textContent === "I've not read it") {
+      strRead.textContent = "I've read it";
+      return;
     }
     // select the array
     // toggle the array
