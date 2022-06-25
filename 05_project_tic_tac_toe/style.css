@@ -3,12 +3,6 @@ body {
 }
 
 .wrapper {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 90vh; */
-
   display: grid;
   grid-template-rows: min-content 1fr min-content;
   gap: 25px;
@@ -31,4 +25,8 @@ body {
   background-color: white;
   margin-top: -1px;
   margin-left: -1px;
+}
+
+.playerTurn {
+  background-color: blue;
 }
