@@ -18,14 +18,13 @@ let player1 = {
 
 let player2 = {
   name: "player2",
-  selections: ["4"],
+  selections: ["4", "4"],
 };
 
 const gameboard = (() => {
   // Initializtion. Retreive the e.target.id
   const playerSelection = (e) => {
-    const playerChoice = e.target.id;
-    console.log(playerChoice);
+    return e.target.id;
   };
 
   // Create object to store available square ID's
@@ -58,10 +57,45 @@ const gameboard = (() => {
     }
   };
 
+  const turnToAct = () => {
+    const isEven = (x) => x % 2 === 0;
+    const p1SelectionsLength = player1.selections.length;
+    const p2SelectionsLength = player2.selections.length;
+    // which player selected the div?
+    if (
+      (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
+      (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
+    ) {
+      return "player1";
+    } else {
+      return "player2";
+    }
+  };
+
+  const drawSelection = (player, squareId) => {
+    const targetSquare = document.getElementById(squareId);
+    const textNodeX = document.createTextNode("X");
+    const textNodeCircle = document.createTextNode("O");
+    if (player === "player1") {
+      targetSquare.appendChild(textNodeX);
+    } else if (player === "player2") {
+      targetSquare.appendChild(textNodeCircle);
+    }
+  };
+
   return {
     playerSelection,
     updateAvailableSquares,
     availableSquares,
+    turnToAct,
+    drawSelection,
+  };
+})();
+
+const displayController = (() => {
+  const test = () => gameboard.playerSelection;
+  return {
+    test,
   };
 })();
 
