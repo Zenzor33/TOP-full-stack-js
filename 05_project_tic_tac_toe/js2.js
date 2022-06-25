@@ -29,8 +29,8 @@ const gameboard = (() => {
   };
 
   // Create object to store available square ID's
-  let squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  let availableSquares = [];
+  const squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  let availableSquares = squares;
   let unavailableSquares = [];
 
   const updateAvailableSquares = () => {
@@ -41,6 +41,8 @@ const gameboard = (() => {
         !unavailableSquares.includes(selection)
       ) {
         unavailableSquares.push(selection);
+        let target = gameboard.availableSquares.indexOf(selection);
+        gameboard.availableSquares.splice(target, 1);
       }
     }
     for (let i = 0; i < player2.selections.length; i++) {
@@ -50,15 +52,16 @@ const gameboard = (() => {
         !unavailableSquares.includes(selection)
       ) {
         unavailableSquares.push(selection);
+        let target = gameboard.availableSquares.indexOf(selection);
+        gameboard.availableSquares.splice(target, 1);
       }
     }
   };
 
   return {
     playerSelection,
-    squares,
-    unavailableSquares,
     updateAvailableSquares,
+    availableSquares,
   };
 })();
 
