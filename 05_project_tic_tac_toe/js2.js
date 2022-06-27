@@ -22,8 +22,10 @@ let player2 = {
 };
 
 const gameboard = (() => {
+  let tempPlayerSelection = "";
   // Initializtion. Retreive the e.target.id
   const playerSelection = (e) => {
+    tempPlayerSelection = e.target.id;
     return e.target.id;
   };
 
@@ -84,6 +86,7 @@ const gameboard = (() => {
   };
 
   return {
+    tempPlayerSelection,
     playerSelection,
     updateAvailableSquares,
     availableSquares,
@@ -93,7 +96,7 @@ const gameboard = (() => {
 })();
 
 const displayController = (() => {
-  const test = () => gameboard.playerSelection;
+  const test = () => gameboard.tempPlayerSelection;
   return {
     test,
   };
