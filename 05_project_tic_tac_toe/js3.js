@@ -11,7 +11,7 @@ let player2 = {
 /*
   Code for game-state conditions:
   - The display controller, on each button click even, should call the gamestate property in the gameboard. The property can be set to:
-  - active
+  - active -- DEFAULT
   - draw
   - p1wins
   - p2wins
@@ -21,6 +21,7 @@ let player2 = {
 const gameboard = (() => {
   const squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let availableSquares = squares;
+  let gameState = "active"; // active, draw, p1wins, p2wins
 
   const updateAvailableSquares = () => {
     for (let i = 0; i < player1.selections.length; i++) {
@@ -79,7 +80,7 @@ const gameboard = (() => {
     ["3", "6", "9"],
   ];
 
-  const checkWinnerP1 = () => {
+  const checkWinner = (playerSelectionArr) => {
     let count = 0;
     for (let i = 0; i < winningPermutations.length; i++) {
       if (count < 3) {
@@ -87,33 +88,20 @@ const gameboard = (() => {
       }
       for (let j = 0; j < winningPermutations[i].length; j++) {
         if (count < 3) {
-          if (player1.selections.includes(winningPermutations[i][j])) {
+          if (playerSelectionArr.includes(winningPermutations[i][j])) {
             count++;
           }
           if (count === 3) {
-            console.log("WINNER");
+            console.log("WINNER"); // change to return here
           }
         }
       }
     }
   };
 
-  const checkWinnerP2 = () => {
-    let count = 0;
-    for (let i = 0; i < winningPermutations.length; i++) {
-      if (count < 3) {
-        count = 0;
-      }
-      for (let j = 0; j < winningPermutations[i].length; j++) {
-        if (count < 3) {
-          if (player2.selections.includes(winningPermutations[i][j])) {
-            count++;
-          }
-          if (count === 3) {
-            console.log("WINNER");
-          }
-        }
-      }
+  const checkDraw = () => {
+    if (availableSquares.length === 0) {
+      console.log("DRAW");
     }
   };
 
@@ -128,11 +116,15 @@ const gameboard = (() => {
       if (activePlayer === "player1") {
         player1.selections.push(selection);
         drawSelection("player1", selection);
-        checkWinnerP1();
+        updateAvailableSquares();
+        checkWinner(player1.selections);
+        checkDraw();
       } else if (activePlayer === "player2") {
         player2.selections.push(selection);
         drawSelection("player2", selection);
-        checkWinnerP2();
+        updateAvailableSquares();
+        checkWinner(player2.selections);
+        checkDraw();
       } else {
         console.log("error determining active player");
       }
