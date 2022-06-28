@@ -10,6 +10,10 @@ body {
   justify-items: center;
 }
 
+.headerText {
+  text-align: center;
+}
+
 .gameboardContainer {
   display: grid;
   grid-template-columns: repeat(3, min-content);
@@ -25,8 +29,20 @@ body {
   background-color: white;
   margin-top: -1px;
   margin-left: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
 }
 
 .playerTurn {
   background-color: blue;
+}
+
+.gameState {
+  background-color: black;
+  margin-top: 25px;
+  color: greenyellow;
+  text-align: center;
+  font-weight: bold;
 }

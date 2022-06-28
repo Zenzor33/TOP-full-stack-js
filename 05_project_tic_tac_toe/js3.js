@@ -8,20 +8,10 @@ let player2 = {
   selections: [],
 };
 
-/*
-  Code for game-state conditions:
-  - The display controller, on each button click even, should call the gamestate property in the gameboard. The property can be set to:
-  - active -- DEFAULT
-  - draw
-  - p1wins
-  - p2wins
-
-  */
-
 const gameboard = (() => {
   const squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let availableSquares = squares;
-  let gameState = "active"; // active, draw, p1wins, p2wins
+  let gameState = "active"; // active, draw, player1, player2
 
   const updateAvailableSquares = () => {
     for (let i = 0; i < player1.selections.length; i++) {
@@ -80,7 +70,7 @@ const gameboard = (() => {
     ["3", "6", "9"],
   ];
 
-  const checkWinner = (playerSelectionArr) => {
+  const checkWinner = (currentPlayer, playerSelectionArr) => {
     let count = 0;
     for (let i = 0; i < winningPermutations.length; i++) {
       if (count < 3) {
@@ -91,8 +81,9 @@ const gameboard = (() => {
           if (playerSelectionArr.includes(winningPermutations[i][j])) {
             count++;
           }
-          if (count === 3) {
+          if (count === 3 && gameboard.gameState === "active") {
             console.log("WINNER"); // change to return here
+            gameboard.gameState = currentPlayer;
           }
         }
       }
@@ -100,8 +91,9 @@ const gameboard = (() => {
   };
 
   const checkDraw = () => {
-    if (availableSquares.length === 0) {
+    if (availableSquares.length === 0 && gameboard.gameState === "active") {
       console.log("DRAW");
+      gameboard.gameState = "draw";
     }
   };
 
@@ -117,13 +109,13 @@ const gameboard = (() => {
         player1.selections.push(selection);
         drawSelection("player1", selection);
         updateAvailableSquares();
-        checkWinner(player1.selections);
+        checkWinner(activePlayer, player1.selections);
         checkDraw();
       } else if (activePlayer === "player2") {
         player2.selections.push(selection);
         drawSelection("player2", selection);
         updateAvailableSquares();
-        checkWinner(player2.selections);
+        checkWinner(activePlayer, player2.selections);
         checkDraw();
       } else {
         console.log("error determining active player");
@@ -137,6 +129,7 @@ const gameboard = (() => {
     availableSquares,
     updateAvailableSquares,
     playGame,
+    gameState,
   };
 })();
 
@@ -144,11 +137,24 @@ const gameboard = (() => {
 const displayController = (() => {
   // Store the player selection in a variabe
   let playerSelection = null;
+
   const setPlayerSelection = (e) => {
-    displayController.playerSelection = e.target.id;
-    gameboard.playGame(displayController.playerSelection);
-    // check gameState
+    if (gameboard.gameState === "active") {
+      displayController.playerSelection = e.target.id;
+      gameboard.playGame(displayController.playerSelection);
+      if (gameboard.gameState !== "active") {
+        setHeaderText();
+      }
+    }
   };
+
+  function setHeaderText() {
+    const element = document.createTextNode(gameboard.gameState);
+    const parent = document.querySelector(".gameState");
+    const elementToReplace = document.querySelector("#gameStateText");
+    elementToReplace.remove();
+    parent.appendChild(element);
+  }
 
   return {
     setPlayerSelection, // necessary for eventListern callback
