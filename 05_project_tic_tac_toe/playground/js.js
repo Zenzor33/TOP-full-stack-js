@@ -12,24 +12,47 @@ const winningPermutations = [
   ["3", "6", "9"],
 ];
 
-let count = 0;
-for (let i = 0; i < winningPermutations.length; i++) {
-  console.log(`${i}: ${winningPermutations[i]}`);
-  if (count < 3) {
-    count = 0;
-  }
-  for (let j = 0; j < winningPermutations[i].length; j++) {
+function checkWinner(playerArr) {
+  let count = 0;
+  for (let i = 0; i < winningPermutations.length; i++) {
+    console.log(`${i}: ${winningPermutations[i]}`);
     if (count < 3) {
-      if (arr1.includes(winningPermutations[i][j])) {
-        count++;
-        console.log(count);
-      }
-      if (count === 3) {
-        console.log("WINNER");
+      count = 0;
+    }
+    for (let j = 0; j < winningPermutations[i].length; j++) {
+      if (count < 3) {
+        if (playerArr.includes(winningPermutations[i][j])) {
+          count++;
+          console.log(count);
+        }
+        if (count === 3) {
+          console.log("WINNER");
+        }
       }
     }
   }
 }
+
+checkWinner(arr1);
+
+// let count = 0;
+// for (let i = 0; i < winningPermutations.length; i++) {
+//   console.log(`${i}: ${winningPermutations[i]}`);
+//   if (count < 3) {
+//     count = 0;
+//   }
+//   for (let j = 0; j < winningPermutations[i].length; j++) {
+//     if (count < 3) {
+//       if (arr1.includes(winningPermutations[i][j])) {
+//         count++;
+//         console.log(count);
+//       }
+//       if (count === 3) {
+//         console.log("WINNER");
+//       }
+//     }
+//   }
+// }
 
 // const containsAll = winner1.every((element) => {
 //   return arr1.includes(element);

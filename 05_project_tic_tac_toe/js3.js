@@ -8,6 +8,16 @@ let player2 = {
   selections: [],
 };
 
+/*
+  Code for game-state conditions:
+  - The display controller, on each button click even, should call the gamestate property in the gameboard. The property can be set to:
+  - active
+  - draw
+  - p1wins
+  - p2wins
+
+  */
+
 const gameboard = (() => {
   const squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let availableSquares = squares;
@@ -145,6 +155,7 @@ const displayController = (() => {
   const setPlayerSelection = (e) => {
     displayController.playerSelection = e.target.id;
     gameboard.playGame(displayController.playerSelection);
+    // check gameState
   };
 
   return {
