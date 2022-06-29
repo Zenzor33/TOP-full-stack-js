@@ -1,11 +1,19 @@
-let player1 = {
-  name: "player1",
-  selections: [],
-};
+// let player1 = {
+//   name: "player1",
+//   selections: [],
+// };
 
-let player2 = {
-  name: "player2",
-  selections: [],
+// let player2 = {
+//   name: "player2",
+//   selections: [],
+// };
+
+let player1 = null;
+let player2 = null;
+
+const Player = (name) => {
+  const selections = [];
+  return { name, selections };
 };
 
 const gameboard = (() => {
@@ -97,6 +105,8 @@ const gameboard = (() => {
     }
   };
 
+  const registerSelection = (player, selection) => {};
+
   const playGame = (selection) => {
     updateAvailableSquares();
     const activePlayer = turnToAct();
@@ -179,6 +189,8 @@ const displayController = (() => {
     e.preventDefault();
     const p1name = document.getElementById("p1name").value;
     const p2name = document.getElementById("p2name").value;
+    player1 = Player(p1name);
+    player2 = Player(p2name);
   });
 
   btnReset.addEventListener("click", () => {
