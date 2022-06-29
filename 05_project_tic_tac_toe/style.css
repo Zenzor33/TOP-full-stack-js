@@ -46,3 +46,15 @@ body {
   text-align: center;
   font-weight: bold;
 }
+
+#divBtnStart {
+  display: flex;
+  justify-content: center;
+}
+
+.playerButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 15px;
+}

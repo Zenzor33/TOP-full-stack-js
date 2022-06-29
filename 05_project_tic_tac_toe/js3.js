@@ -121,7 +121,7 @@ const gameboard = (() => {
         console.log("error determining active player");
       }
     } else {
-      console.log("square unavailable. player must chose different square");
+      //   console.log("square unavailable. player must chose different square");
     }
   };
 
@@ -156,6 +156,10 @@ const displayController = (() => {
     parent.appendChild(element);
   }
 
+  // reset button
+  // player1 button
+  // player2 button
+
   return {
     setPlayerSelection, // necessary for eventListern callback
   };
@@ -163,8 +167,24 @@ const displayController = (() => {
 
 (function () {
   const gamesquareDivs = document.querySelectorAll(".gamesquare");
+  const btnReset = document.querySelector("#reset");
+  const btnStart = document.querySelector("#btnStart");
 
   gamesquareDivs.forEach((div) =>
     div.addEventListener("click", displayController.setPlayerSelection)
   );
+
+  btnStart.addEventListener("click", (e) => {
+    // retrieve text form input forms -> store in variables
+    e.preventDefault();
+    const p1name = document.getElementById("p1name").value;
+    const p2name = document.getElementById("p2name").value;
+  });
+
+  btnReset.addEventListener("click", () => {
+    // playerSelections arrays = []
+    // Then updateavailable squares
+    player1.selections = [];
+    player2.selections = [];
+  });
 })();
