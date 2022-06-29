@@ -46,29 +46,15 @@ const gameboard = (() => {
     const p1SelectionsLength = player1.selections.length;
     const p2SelectionsLength = player2.selections.length;
 
-    if (
-      (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
+    return (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
       (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
-    ) {
-      return player1;
-    } else {
-      return player2;
-    }
-  };
-
-  const turnToAct2 = () => {
-    const isEven = (x) => x % 2 === 0;
-    const p1SelectionsLength = player1.selections.length;
-    const p2SelectionsLength = player2.selections.length;
-
-    (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
-    (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
       ? player1
       : player2;
   };
 
   const drawSelection = (playerObj, squareId) => {
     const playerId = playerObj.id;
+
     const targetSquare = document.getElementById(squareId);
     const textNodeX = document.createTextNode("X");
     const textNodeCircle = document.createTextNode("O");
