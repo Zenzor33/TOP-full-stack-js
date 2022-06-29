@@ -1,15 +1,19 @@
 /*
 Issues:
 - player1 & player2 are global variables. I don't know how to fix this.
-- gameboard.registerSelection can be reduced to two arguments. I can rewrite the functions to accept the player object instead of the string
+
+
+- FIXED gameboard.turnToAct() returns a string that's converted to an object. It can isntead return to object.id
+
+- FIXED: gameboard.registerSelection can be reduced to two arguments. I can rewrite the functions to accept the player object instead of the string
 */
 
 let player1 = null;
 let player2 = null;
 
-const Player = (name) => {
+const Player = (name, id) => {
   const selections = [];
-  return { name, selections };
+  return { name, id, selections };
 };
 
 const gameboard = (() => {
@@ -46,19 +50,31 @@ const gameboard = (() => {
       (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
       (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
     ) {
-      return "player1";
+      return player1;
     } else {
-      return "player2";
+      return player2;
     }
   };
 
-  const drawSelection = (player, squareId) => {
+  const turnToAct2 = () => {
+    const isEven = (x) => x % 2 === 0;
+    const p1SelectionsLength = player1.selections.length;
+    const p2SelectionsLength = player2.selections.length;
+
+    (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
+    (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
+      ? player1
+      : player2;
+  };
+
+  const drawSelection = (playerObj, squareId) => {
+    const playerId = playerObj.id;
     const targetSquare = document.getElementById(squareId);
     const textNodeX = document.createTextNode("X");
     const textNodeCircle = document.createTextNode("O");
-    if (player === "player1") {
+    if (playerId === "player1") {
       targetSquare.appendChild(textNodeX);
-    } else if (player === "player2") {
+    } else if (playerId === "player2") {
       targetSquare.appendChild(textNodeCircle);
     }
   };
@@ -74,7 +90,7 @@ const gameboard = (() => {
     ["3", "6", "9"],
   ];
 
-  const checkWinner = (currentPlayer, playerSelectionArr) => {
+  const checkWinner = (playerObj, playerSelectionArr) => {
     let count = 0;
     for (let i = 0; i < winningPermutations.length; i++) {
       if (count < 3) {
@@ -86,8 +102,7 @@ const gameboard = (() => {
             count++;
           }
           if (count === 3 && gameboard.gameState === "active") {
-            console.log("WINNER"); // change to return here
-            gameboard.gameState = currentPlayer;
+            gameboard.gameState = playerObj.id; // winner
           }
         }
       }
@@ -96,27 +111,26 @@ const gameboard = (() => {
 
   const checkDraw = () => {
     if (availableSquares.length === 0 && gameboard.gameState === "active") {
-      //   console.log("DRAW");
       gameboard.gameState = "draw";
     }
   };
 
-  const registerSelection = (playerStr, playerObj, selection) => {
+  const registerSelection = (playerObj, selection) => {
     playerObj.selections.push(selection);
-    drawSelection(playerStr, selection);
+    drawSelection(playerObj, selection);
     updateAvailableSquares();
-    checkWinner(playerStr, playerObj.selections);
+    checkWinner(playerObj, playerObj.selections);
     checkDraw();
   };
 
   const playGame = (selection) => {
-    // updateAvailableSquares(); <-- Probably unnecessary?
     const activePlayer = turnToAct();
-    actPlayer = activePlayer === "player1" ? player1 : player2; // converts string to object
+    console.log(activePlayer);
+    // actPlayerObj = activePlayer === "player1" ? player1 : player2;
 
     if (isSquareAvailable(selection)) {
-      if (activePlayer === "player1" || activePlayer === "player2") {
-        registerSelection(activePlayer, actPlayer, selection);
+      if (activePlayer.id === "player1" || activePlayer.id === "player2") {
+        registerSelection(activePlayer, selection);
       } else {
         console.log("error determining active player");
       }
@@ -173,7 +187,7 @@ const displayController = (() => {
     e.preventDefault();
     const p1name = document.getElementById("p1name").value;
     const p2name = document.getElementById("p2name").value;
-    player1 = Player(p1name);
-    player2 = Player(p2name);
+    player1 = Player(p1name, "player1");
+    player2 = Player(p2name, "player2");
   });
 })();
