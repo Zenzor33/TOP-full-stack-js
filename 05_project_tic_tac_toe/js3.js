@@ -1,12 +1,8 @@
-// let player1 = {
-//   name: "player1",
-//   selections: [],
-// };
-
-// let player2 = {
-//   name: "player2",
-//   selections: [],
-// };
+/*
+Issues:
+- player1 & player2 are global variables. I don't know how to fix this.
+- gameboard.registerSelection can be reduced to two arguments. I can rewrite the functions to accept the player object instead of the string
+*/
 
 let player1 = null;
 let player2 = null;
@@ -45,7 +41,7 @@ const gameboard = (() => {
     const isEven = (x) => x % 2 === 0;
     const p1SelectionsLength = player1.selections.length;
     const p2SelectionsLength = player2.selections.length;
-    // which player selected the div?
+
     if (
       (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
       (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
@@ -100,33 +96,27 @@ const gameboard = (() => {
 
   const checkDraw = () => {
     if (availableSquares.length === 0 && gameboard.gameState === "active") {
-      console.log("DRAW");
+      //   console.log("DRAW");
       gameboard.gameState = "draw";
     }
   };
 
-  const registerSelection = (player, selection) => {};
+  const registerSelection = (playerStr, playerObj, selection) => {
+    playerObj.selections.push(selection);
+    drawSelection(playerStr, selection);
+    updateAvailableSquares();
+    checkWinner(playerStr, playerObj.selections);
+    checkDraw();
+  };
 
   const playGame = (selection) => {
-    updateAvailableSquares();
+    // updateAvailableSquares(); <-- Probably unnecessary?
     const activePlayer = turnToAct();
+    actPlayer = activePlayer === "player1" ? player1 : player2; // converts string to object
 
-    // if gamesquare is available -> continue
     if (isSquareAvailable(selection)) {
-      // Determine which player's turn to act
-      // Push selection to player's array
-      if (activePlayer === "player1") {
-        player1.selections.push(selection);
-        drawSelection("player1", selection);
-        updateAvailableSquares();
-        checkWinner(activePlayer, player1.selections);
-        checkDraw();
-      } else if (activePlayer === "player2") {
-        player2.selections.push(selection);
-        drawSelection("player2", selection);
-        updateAvailableSquares();
-        checkWinner(activePlayer, player2.selections);
-        checkDraw();
+      if (activePlayer === "player1" || activePlayer === "player2") {
+        registerSelection(activePlayer, actPlayer, selection);
       } else {
         console.log("error determining active player");
       }
@@ -143,9 +133,7 @@ const gameboard = (() => {
   };
 })();
 
-// Initiate program
 const displayController = (() => {
-  // Store the player selection in a variabe
   let playerSelection = null;
 
   const setPlayerSelection = (e) => {
@@ -165,10 +153,6 @@ const displayController = (() => {
     elementToReplace.remove();
     parent.appendChild(element);
   }
-
-  // reset button
-  // player1 button
-  // player2 button
 
   return {
     setPlayerSelection, // necessary for eventListern callback
@@ -191,12 +175,5 @@ const displayController = (() => {
     const p2name = document.getElementById("p2name").value;
     player1 = Player(p1name);
     player2 = Player(p2name);
-  });
-
-  btnReset.addEventListener("click", () => {
-    // playerSelections arrays = []
-    // Then updateavailable squares
-    player1.selections = [];
-    player2.selections = [];
   });
 })();
