@@ -1,11 +1,10 @@
 /*
 Issues:
-- player1 & player2 are global variables. I don't know how to fix this.
-
-
-- FIXED gameboard.turnToAct() returns a string that's converted to an object. It can isntead return to object.id
-
-- FIXED: gameboard.registerSelection can be reduced to two arguments. I can rewrite the functions to accept the player object instead of the string
+1) player1 & player2 are global variables. How best to fix this?
+2) many functions have multiple responsibilities:
+-- is gameboard.registerSelection an appropriate function?
+-- is gameboard.playGame an appropriate function?
+-- 
 */
 
 let player1 = null;
@@ -59,15 +58,13 @@ const gameboard = (() => {
     ["3", "6", "9"],
   ];
 
-  const checkWinner = (playerObj, playerSelectionArr) => {
+  const checkWinner = (playerObj) => {
     let count = 0;
     for (let i = 0; i < winningPermutations.length; i++) {
-      if (count < 3) {
-        count = 0;
-      }
+      if (count < 3) count = 0;
       for (let j = 0; j < winningPermutations[i].length; j++) {
         if (count < 3) {
-          if (playerSelectionArr.includes(winningPermutations[i][j])) {
+          if (playerObj.selections.includes(winningPermutations[i][j])) {
             count++;
           }
           if (count === 3 && gameboard.gameState === "active") {
@@ -88,14 +85,12 @@ const gameboard = (() => {
     playerObj.selections.push(selection);
     drawSelection(playerObj, selection);
     updateAvailableSquares(playerObj);
-    checkWinner(playerObj, playerObj.selections);
+    checkWinner(playerObj);
     checkDraw();
   };
 
   const playGame = (selection) => {
     const activePlayer = turnToAct();
-    console.log(activePlayer);
-    // actPlayerObj = activePlayer === "player1" ? player1 : player2;
 
     if (isSquareAvailable(selection)) {
       if (activePlayer.id === "player1" || activePlayer.id === "player2") {
@@ -124,15 +119,16 @@ const displayController = (() => {
       displayController.playerSelection = e.target.id;
       gameboard.playGame(displayController.playerSelection);
       if (gameboard.gameState !== "active") {
-        setHeaderText();
+        setHeaderText(); // changes header text to display outcome
       }
     }
   };
 
   function setHeaderText() {
-    const element = document.createTextNode(gameboard.gameState);
+    const element = document.createTextNode(`${gameboard.gameState} wins!`);
     const parent = document.querySelector(".gameState");
     const elementToReplace = document.querySelector("#gameStateText");
+
     elementToReplace.remove();
     parent.appendChild(element);
   }
@@ -158,5 +154,8 @@ const displayController = (() => {
     const p2name = document.getElementById("p2name").value;
     player1 = Player(p1name, "player1");
     player2 = Player(p2name, "player2");
+
+    const hiddenDivs = document.querySelectorAll(".hidden");
+    hiddenDivs.forEach((div) => div.classList.remove("hidden"));
   });
 })();

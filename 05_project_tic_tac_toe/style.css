@@ -58,3 +58,7 @@ body {
   margin-top: 15px;
   gap: 15px;
 }
+
+.hidden {
+  display: none;
+}
