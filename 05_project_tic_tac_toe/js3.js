@@ -4,7 +4,6 @@ Issues:
 2) many functions have multiple responsibilities:
 -- is gameboard.registerSelection an appropriate function?
 -- is gameboard.playGame an appropriate function?
--- 
 */
 
 let player1 = null;
@@ -18,7 +17,9 @@ const Player = (name, id) => {
 const gameboard = (() => {
   const squares = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let availableSquares = squares;
-  let gameState = "active"; // active, draw, player1, player2
+  let gameState = "active"; // active, concluded
+  let gameOutcome = ""; // decisive, draw
+  let gameWinner = null;
 
   const updateAvailableSquares = (playerObj) => {
     for (let i = 0; i < playerObj.selections.length; i++) {
@@ -68,7 +69,9 @@ const gameboard = (() => {
             count++;
           }
           if (count === 3 && gameboard.gameState === "active") {
-            gameboard.gameState = playerObj.id; // winner
+            gameboard.gameState = "concluded";
+            gameboard.gameOutcome = "decisive";
+            gameboard.gameWinner = playerObj;
           }
         }
       }
@@ -77,7 +80,8 @@ const gameboard = (() => {
 
   const checkDraw = () => {
     if (availableSquares.length === 0 && gameboard.gameState === "active") {
-      gameboard.gameState = "draw";
+      gameboard.gameState = "concluded";
+      gameboard.gameOutcome = "draw";
     }
   };
 
@@ -108,6 +112,8 @@ const gameboard = (() => {
     updateAvailableSquares,
     playGame,
     gameState,
+    gameOutcome,
+    gameWinner,
   };
 })();
 
@@ -118,19 +124,27 @@ const displayController = (() => {
     if (gameboard.gameState === "active") {
       displayController.playerSelection = e.target.id;
       gameboard.playGame(displayController.playerSelection);
-      if (gameboard.gameState !== "active") {
-        setHeaderText(); // changes header text to display outcome
-      }
+      if (gameboard.gameState === "concluded")
+        setHeaderText(gameboard.gameOutcome);
     }
   };
 
-  function setHeaderText() {
-    const element = document.createTextNode(`${gameboard.gameState} wins!`);
+  function setHeaderText(gameOutcome) {
     const parent = document.querySelector(".gameState");
     const elementToReplace = document.querySelector("#gameStateText");
-
     elementToReplace.remove();
-    parent.appendChild(element);
+
+    if (gameOutcome === "draw") {
+      const element = document.createTextNode(`Draw! :)`);
+      parent.appendChild(element);
+    }
+
+    if (gameOutcome === "decisive") {
+      const element = document.createTextNode(
+        `${gameboard.gameWinner.name} wins :)`
+      );
+      parent.appendChild(element);
+    }
   }
 
   return {
