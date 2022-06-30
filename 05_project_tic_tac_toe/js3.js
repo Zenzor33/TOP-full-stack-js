@@ -35,27 +35,17 @@ const gameboard = (() => {
     gameboard.availableSquares.includes(selection) ? true : false;
 
   const turnToAct = () => {
-    const isEven = (x) => x % 2 === 0;
-    const p1SelectionsLength = player1.selections.length;
-    const p2SelectionsLength = player2.selections.length;
-
-    return (isEven(p1SelectionsLength) && isEven(p2SelectionsLength)) ||
-      (!isEven(p1SelectionsLength) && !isEven(p2SelectionsLength))
+    return player1.selections.length === player2.selections.length
       ? player1
       : player2;
   };
 
   const drawSelection = (playerObj, squareId) => {
-    const playerId = playerObj.id;
-
     const targetSquare = document.getElementById(squareId);
-    const textNodeX = document.createTextNode("X");
-    const textNodeCircle = document.createTextNode("O");
-    if (playerId === "player1") {
-      targetSquare.appendChild(textNodeX);
-    } else if (playerId === "player2") {
-      targetSquare.appendChild(textNodeCircle);
-    }
+
+    return playerObj.id === "player1"
+      ? targetSquare.appendChild(document.createTextNode("X"))
+      : targetSquare.appendChild(document.createTextNode("O"));
   };
 
   const winningPermutations = [
