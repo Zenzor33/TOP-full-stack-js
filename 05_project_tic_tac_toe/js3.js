@@ -97,13 +97,7 @@ const gameboard = (() => {
     const activePlayer = turnToAct();
 
     if (isSquareAvailable(selection)) {
-      if (activePlayer.id === "player1" || activePlayer.id === "player2") {
-        registerSelection(activePlayer, selection);
-      } else {
-        console.log("error determining active player");
-      }
-    } else {
-      //   console.log("square unavailable. player must chose different square");
+      registerSelection(activePlayer, selection);
     }
   };
 
