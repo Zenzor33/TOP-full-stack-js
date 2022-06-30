@@ -21,16 +21,9 @@ const gameboard = (() => {
   let availableSquares = squares;
   let gameState = "active"; // active, draw, player1, player2
 
-  const updateAvailableSquares = () => {
-    for (let i = 0; i < player1.selections.length; i++) {
-      let selection = player1.selections[i];
-      if (squares.includes(selection)) {
-        let target = gameboard.availableSquares.indexOf(selection);
-        gameboard.availableSquares.splice(target, 1);
-      }
-    }
-    for (let i = 0; i < player2.selections.length; i++) {
-      let selection = player2.selections[i];
+  const updateAvailableSquares = (playerObj) => {
+    for (let i = 0; i < playerObj.selections.length; i++) {
+      let selection = playerObj.selections[i];
       if (squares.includes(selection)) {
         let target = gameboard.availableSquares.indexOf(selection);
         gameboard.availableSquares.splice(target, 1);
@@ -104,7 +97,7 @@ const gameboard = (() => {
   const registerSelection = (playerObj, selection) => {
     playerObj.selections.push(selection);
     drawSelection(playerObj, selection);
-    updateAvailableSquares();
+    updateAvailableSquares(playerObj);
     checkWinner(playerObj, playerObj.selections);
     checkDraw();
   };
