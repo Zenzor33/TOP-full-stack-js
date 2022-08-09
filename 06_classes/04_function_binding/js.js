@@ -30,5 +30,5 @@ setTimeout(sayHi, 1000); // Hello, John!
 user = {
   sayHi() {
     console.log("Another user in setTimeout!");
-  },
+    },
 };
