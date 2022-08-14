@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: orange;
+  /* border: 3px solid gray; */
+  height: 100vh;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  /* border: 3px solid black */
+}
+
+.header,
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  background-color: rgb(255, 234, 151);
+}
+
+.headerTab {
+  border: 3px solid black;
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  min-height: 75%;
+  /* padding-top: 25px; */
+}
+
+.bodyContainer {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  background-color: rgb(255, 234, 151);
+  width: 50%;
+  border-radius: 12px;
+  padding: 10px;
+  gap: 50px;
+}
+
+.display {
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 5px;
+  background-color: yellowgreen;
+}
+
+.display-title-container {
+  display: flex;
+  gap: 25px;
+}
+
+.display-title {
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 5px;
+  background-color: yellowgreen;
+}
+
+.display-title-image,
+#cheeseburger,
+#slotmachine {
+  max-width: 25px;
+  max-height: 25px;
+}
