@@ -1,38 +1,5 @@
-const createHeaderTab = (div, classe, textNode, id) => {
-  const header = document.querySelector(".header");
-  div.classList.add(classe);
-  div.setAttribute("id", id);
-  let text = document.createTextNode(textNode);
-  div.appendChild(text);
-  header.appendChild(div);
-};
-
 const generateHome = () => {
-  const content = document.querySelector("#content");
-
-  // // HEADER
-
-  let header = document.createElement("div");
-  header.classList.add("header");
-  content.appendChild(header);
-
-  // header tabs
-
-  // home
-  const home = document.createElement("div");
-  createHeaderTab(home, "headerTab", "Home", "home");
-
-  // Menu
-  const menu = document.createElement("div");
-  createHeaderTab(menu, "headerTab", "Menu");
-
-  // Contact
-  const contact = document.createElement("div");
-  createHeaderTab(contact, "headerTab", "Contact");
-
-  // // BODY
-  const body = document.createElement("div");
-  body.classList.add("body");
+  const body = document.querySelector(".body");
   body.innerHTML = `<div class="bodyContainer">
   <div class="display-title-container">
     <div class="display-title-image">
@@ -82,13 +49,6 @@ const generateHome = () => {
     </div>
   </div>
 </div>`;
-  content.appendChild(body);
-
-  const footer = document.createElement("div");
-  footer.classList.add("footer");
-  const footerText = document.createTextNode("Footer");
-  footer.appendChild(footerText);
-  content.appendChild(footer);
 };
 
 export default generateHome;
