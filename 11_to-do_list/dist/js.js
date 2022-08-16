@@ -14,24 +14,60 @@ Add event listener to project submit button #btnProjectSubmit:
 - append .project-text and .project-icon to .project
 - append .project as last child to #projects-container 
 
+Create a factory function for new projects. Each project has properties for:
+- title, task description, due date, priority, notes
+
+Seperate object for tasks? No. Separate location for tasks.
+
+Create popup for tasks #btn-add-task
+
 */
 
 const btnAddProject = document.getElementById("btn-add-project");
+const btnAddTask = document.getElementById("btn-add-task");
 const btnCancelProject = document.getElementById("project-btn-cancel");
 const btnSubmitProject = document.getElementById("btnProjectSubmit");
-const formPopup = document.querySelector(".form-popup");
-const pageMask = document.getElementById("page-mask");
 
 btnAddProject.addEventListener("click", popupNewProject);
+btnAddTask.addEventListener("click", popupTask);
 btnCancelProject.addEventListener("click", cancelProject);
 btnSubmitProject.addEventListener("click", addNewProject);
 
+/*
+Create a factory function for new projects. Each project has properties for:
+- title, task description, due date, priority, notes
+*/
+
+let count = 0;
+const counts = () => {
+  count++;
+  return count;
+};
+
+const myProjects = [];
+
+const projectFactory = (title) => {
+  this.id = counts();
+  this.title = title;
+  return { id, title };
+};
+
+function popupTask() {
+  console.log("tasks");
+}
+
+// use ID's
 function popupNewProject() {
+  const formPopup = document.querySelector("#popup-project");
+  const pageMask = document.querySelector("#page-mask-project");
   formPopup.style.display = "block";
   pageMask.style.display = "block";
 }
 
+// use ID's
 function cancelProject() {
+  const formPopup = document.querySelector("#popup-project");
+  const pageMask = document.querySelector("#page-mask-project");
   formPopup.style.display = "none";
   pageMask.style.display = "none";
 }
@@ -59,4 +95,13 @@ function addNewProject(e) {
   divProject.appendChild(divProjectIcon);
 
   container.appendChild(divProject);
+
+  createTheProject(projectName);
+
+  cancelProject();
+}
+
+function createTheProject(title) {
+  const thisProject = projectFactory(title);
+  myProjects.push(thisProject);
 }

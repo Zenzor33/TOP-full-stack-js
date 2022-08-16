@@ -95,7 +95,7 @@ body {
   background-color: darkgray;
 }
 
-#page-mask {
+.page-mask {
   display: none;
   position: fixed;
   z-index: 999;
