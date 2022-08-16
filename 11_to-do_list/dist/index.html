@@ -8,22 +8,68 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="page-mask">
+      <div class="form-popup" id="myForm">
+        <form action="/action_page.php" class="form-container">
+          <label for="project-name">Project Name:</label>
+          <input
+            type="text"
+            placeholder="Enter project name"
+            name="project-name"
+            required
+          />
+          <br />
+
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn cancel">Cancel</button>
+        </form>
+      </div>
+    </div>
     <div class="header">
-      <div class="header-left">To-Do List</div>
+      <div class="header-left"><h1>To-Do List</h1></div>
       <div class="header-right">
-        <div id="github">Github</div>
+        <div id="github">
+          <a
+            href="https://github.com/Zenzor33/TOP-full-stack-js/tree/main/11_to-do_list"
+            >Github</a
+          >
+        </div>
       </div>
     </div>
     <div class="content">
-      <div class="content-left">
-        <div class="content-text" id="content-left-text">Projects</div>
-        <div class="content-button" id="content-left-button">
-          <button id="btn-add-project">Add Project</button>
+      <div class="content-header">
+        <div class="content-left">
+          <div class="content-text" id="content-left-text">Projects</div>
+          <div class="content-button" id="content-left-button">
+            <button class="btn" id="btn-add-project">Add Project</button>
+          </div>
+        </div>
+        <div class="content-right">
+          <div class="content-text" id="content-right-text">Tasks</div>
+          <div class="content-button" id="content-right-button">
+            <button class="btn" id="btn-add-task">Add Task</button>
+          </div>
         </div>
       </div>
-      <div class="content-right">
-        <div class="content-text" id="content-right-text">Tasks</div>
-        <div class="content-button" id="content-right-button"></div>
+      <div class="content-lists">
+        <div class="content-lists-left" id="projects-container">
+          <div class="project">
+            <div class="project-text">Default Project</div>
+            <div class="project-icon">[trash icon]</div>
+          </div>
+        </div>
+        <div class="content-lists-right" id="tasks-container">
+          <div class="task">
+            <div class="task-title">Task title</div>
+            <div class="task-due-date">Task due date</div>
+            <div class="task-priority">Task priority</div>
+            <div class="task-notes">Task notes</div>
+            <div class="task-icon-container">
+              <div class="task-icon-edit">[edit icon]</div>
+              <div class="task-icon-trash">[trash icon]</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script src="js.js"></script>
