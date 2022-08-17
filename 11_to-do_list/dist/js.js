@@ -1,36 +1,20 @@
 /*
 
 Algorithm:
-- Add event listener to add project button
-- On click, it displays a popup overlay with a text field with label: 'Project Name' and two buttons: 'Submit' and 'Cancel'.
 
-Change CSS properties of .form-popup and #page-mask:
--- Remove display:none 
-
-Add event listener to project submit button #btnProjectSubmit:
-- Create three new divs: .project, .project-text, .project-icon 
-- .project-text has innerText of the project's name
-- .project-icon (temporarily) has innertext of '[trash icon]'
-- append .project-text and .project-icon to .project
-- append .project as last child to #projects-container 
-
-Create a factory function for new projects. Each project has properties for:
-- title, task description, due date, priority, notes
-
-Seperate object for tasks? No. Separate location for tasks.
-
-Create popup for tasks #btn-add-task
-
+- 
 */
 
 const btnAddProject = document.getElementById("btn-add-project");
 const btnAddTask = document.getElementById("btn-add-task");
 const btnCancelProject = document.getElementById("project-btn-cancel");
+const btnCancelTask = document.getElementById("task-btn-cancel");
 const btnSubmitProject = document.getElementById("btnProjectSubmit");
 
 btnAddProject.addEventListener("click", popupNewProject);
 btnAddTask.addEventListener("click", popupTask);
 btnCancelProject.addEventListener("click", cancelProject);
+btnCancelTask.addEventListener("click", cancelTask);
 btnSubmitProject.addEventListener("click", addNewProject);
 
 /*
@@ -52,8 +36,20 @@ const projectFactory = (title) => {
   return { id, title };
 };
 
+/*
+Steps:
+- When user clicks project text, clear the task information and load that project's task information.
+- Each project's task information should be stored in an object.
+- How to associate a task with an object's ID?
+
+First: highlight the div when the project is selected.
+*/
+
 function popupTask() {
-  console.log("tasks");
+  const formPopup = document.querySelector("#formAddTask");
+  const pageMask = document.querySelector("#page-mask-task");
+  formPopup.style.display = "block";
+  pageMask.style.display = "block";
 }
 
 // use ID's
@@ -72,6 +68,13 @@ function cancelProject() {
   pageMask.style.display = "none";
 }
 
+function cancelTask() {
+  const formPopup = document.querySelector("#formAddTask");
+  const pageMask = document.querySelector("#page-mask-task");
+  formPopup.style.display = "none";
+  pageMask.style.display = "none";
+}
+
 function addNewProject(e) {
   e.preventDefault();
 
@@ -79,9 +82,18 @@ function addNewProject(e) {
 
   const divProject = document.createElement("div");
   divProject.classList.add("project");
+  divProject.setAttribute("id", `project-${count + 1}`);
+
+  divProject.addEventListener("click", () => {
+    const divPrevSelected = document.querySelector(".highlight");
+    if (divPrevSelected) divPrevSelected.classList.remove("highlight");
+    divProject.classList.add("highlight");
+  });
 
   const divProjectText = document.createElement("div");
   divProjectText.classList.add("project-text");
+  //   divProjectText.setAttribute("id", count + 1);
+
   // change below this line
   const userInputField = document.getElementById("project-name");
   const projectName = userInputField.value;
@@ -91,6 +103,7 @@ function addNewProject(e) {
 
   const divProjectIcon = document.createElement("project-icon");
   divProjectIcon.classList.add("project-icon");
+  //   divProjectIcon.setAttribute("id", count + 1);
   divProjectIcon.innerText = "[icon]";
   divProject.appendChild(divProjectIcon);
 

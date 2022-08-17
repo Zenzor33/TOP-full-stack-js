@@ -31,19 +31,51 @@
       </div>
     </div>
 
-    <div class="page-mask">
+    <div class="page-mask" id="page-mask-task">
       <div class="form-popup" id="formAddTask">
         <form action="" class="form-container">
           <label for="task-title">Task Title:</label>
+          <br />
           <input
             type="text"
             id="task-title"
-            placeholder="Enter project name"
+            placeholder="Enter name"
             name="task-title"
             required
           />
           <br />
+          <label for="task-description">Description:</label>
+          <br />
+          <textarea
+            id="task-description"
+            placeholder="Enter description"
+            name="task-description"
+            rows="10"
+            cols="40"
+          ></textarea>
+          <br />
+          <label for="task-date">Due date:</label>
+          <br />
+          <input
+            type="date"
+            id="task-date"
+            placeholder="Enter date"
+            name="task-date"
+            required
+          />
+          <br />
+          <label for="task-notes">Notes:</label>
+          <br />
+          <textarea
+            id="task-notes"
+            placeholder="Enter notes"
+            name="task-notes"
+            rows="10"
+            cols="40"
+          ></textarea>
 
+          <br />
+          <br />
           <button type="submit" class="btn" id="btnTaskSubmit">Submit</button>
           <button type="button" class="btn cancel" id="task-btn-cancel">
             Cancel
