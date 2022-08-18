@@ -3,7 +3,7 @@
 Algorithm:
 
 - Delete task from myTasks when trash icon is clicked
-- Delete the innerHtml for the task
+- Delete div with
 */
 
 const btnAddProject = document.getElementById("btn-add-project");
@@ -143,6 +143,7 @@ function attachEventListenerToTaskIcons(e) {
           i--;
         }
       }
+      targetDivsGrandparent.remove();
     })
   );
 }
