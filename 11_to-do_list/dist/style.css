@@ -63,6 +63,9 @@ body {
 
 .content-lists-left,
 .content-lists-right {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
   border: 3px solid orange;
   width: 100%;
   padding: 25px;
