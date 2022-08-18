@@ -2,7 +2,6 @@
 
 Algorithm:
 
-- Make project div disappear when trash icon is clicked
 - Delete task from myTasks when trash icon is clicked
 - Delete the innerHtml for the task
 */
@@ -20,11 +19,6 @@ btnCancelProject.addEventListener("click", cancelProject);
 btnCancelTask.addEventListener("click", cancelTask);
 btnSubmitProject.addEventListener("click", addNewProject);
 btnSubmitTask.addEventListener("click", addNewTask);
-
-/*
-Create a factory function for new projects. Each project has properties for:
-- title, task description, due date, priority, notes
-*/
 
 let count = 0;
 const counts = () => {
@@ -64,9 +58,6 @@ function resetSomeElements() {
   someElements = [];
 }
 
-// function addNewTask() should attach to the submit button
-// function loadTasks() should attach to the project div
-
 function loadTasks(projectId) {
   // load each element of myTasks with projectId property value of the parameter.
   const container = document.getElementById("tasks-container");
@@ -91,6 +82,7 @@ function loadTasks(projectId) {
     <div class="task-icon-trash">[trash icon]</div>
   </div>
 </div>`;
+    attachEventListenerToTaskIcons();
     container.appendChild(divTask);
   });
 }
@@ -112,10 +104,10 @@ function addNewTask(e) {
   myTasks.push(thisTask);
 
   const taskId = thisTask.taskId;
-  console.log(`taskId: ${taskId}`);
 
   const divTask = document.createElement("div");
   divTask.classList.add("task");
+  divTask.setAttribute("id", taskId);
   divTask.innerHTML = `<div class="task-title">Task title: ${taskTitle}</div>
   <div class="task-description">Task description: ${description} </div>
   <div class="task-due-date">Task due date:</div>
@@ -129,8 +121,30 @@ function addNewTask(e) {
   </div>
 </div>`;
   container.appendChild(divTask);
+  // Here, we need to add an event listener individually or run the attach all.
+  attachEventListenerToTaskIcons();
 
   cancelTask();
+}
+
+function attachEventListenerToTaskIcons(e) {
+  const targetDivs = document.querySelectorAll(".task-icon-trash");
+
+  targetDivs.forEach((element) =>
+    element.addEventListener("click", (e) => {
+      const target = e.target;
+      const targetDivsParent = target.parentElement;
+      const targetDivsGrandparent = targetDivsParent.parentElement;
+      console.log("here");
+      for (let i = 0; i < myTasks.length; i++) {
+        if (targetDivsGrandparent.id == myTasks[i].taskId) {
+          const index = myTasks.indexOf(myTasks[i]);
+          myTasks.splice(index, 1);
+          i--;
+        }
+      }
+    })
+  );
 }
 
 function popupTask() {
@@ -210,6 +224,7 @@ function deleteProject(e) {
   const test = e.target;
   const testParent = test.parentElement.id;
   const projectId = testParent;
+  const projectDiv = test.parentElement;
 
   // delete project from myProject arrray
   for (let i = 0; i < myProjects.length; i++) {
@@ -230,6 +245,9 @@ function deleteProject(e) {
       i--;
     }
   }
+
+  // remove project div from the display
+  projectDiv.remove();
 }
 
 function createTheProject(title) {
