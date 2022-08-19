@@ -25,19 +25,68 @@ DOM manipulation:
 - Separate the DOM manipulation from the backend, via a module?
 */
 
-const btnAddProject = document.getElementById("btn-add-project");
-const btnAddTask = document.getElementById("btn-add-task");
-const btnCancelProject = document.getElementById("project-btn-cancel");
-const btnCancelTask = document.getElementById("task-btn-cancel");
-const btnSubmitProject = document.getElementById("btnProjectSubmit");
-const btnSubmitTask = document.getElementById("btnTaskSubmit");
+function displayController() {
+  const btnAddProject = document.getElementById("btn-add-project");
+  const btnAddTask = document.getElementById("btn-add-task");
+  const btnCancelProject = document.getElementById("project-btn-cancel");
+  const btnCancelTask = document.getElementById("task-btn-cancel");
+  const btnSubmitProject = document.getElementById("btnProjectSubmit");
+  const btnSubmitTask = document.getElementById("btnTaskSubmit");
 
-btnAddProject.addEventListener("click", popupNewProject);
-btnAddTask.addEventListener("click", popupTask);
-btnCancelProject.addEventListener("click", cancelProject);
-btnCancelTask.addEventListener("click", cancelTask);
-btnSubmitProject.addEventListener("click", addNewProject);
-btnSubmitTask.addEventListener("click", addNewTask);
+  btnAddProject.addEventListener(
+    "click",
+    changeDisplayType("block", ["popup-project", "page-mask-project"])
+  );
+  btnAddTask.addEventListener("click", popupTask);
+  btnCancelProject.addEventListener("click", cancelProject);
+  btnCancelTask.addEventListener("click", cancelTask);
+  btnSubmitProject.addEventListener("click", addNewProject);
+  btnSubmitTask.addEventListener("click", addNewTask);
+
+  // function that accepts parameters of [array of elementId's] and displayType
+
+  function changeDisplayType(displayType, ...ElementId) {
+    const arr = ElementId;
+    const id1 = arr[0][0];
+    const id2 = arr[0][1];
+
+    const element1 = document.querySelector(`#${id1}`);
+    const element2 = document.querySelector(`#${id2}`);
+    element1.style.display = displayType;
+    element2.style.display = displayType;
+  }
+
+  function popupNewProject() {
+    const formPopup = document.querySelector("#popup-project");
+    const pageMask = document.querySelector("#page-mask-project");
+    formPopup.style.display = "block";
+    pageMask.style.display = "block";
+  }
+
+  function popupTask() {
+    const formPopup = document.querySelector("#formAddTask");
+    const pageMask = document.querySelector("#page-mask-task");
+    formPopup.style.display = "block";
+    pageMask.style.display = "block";
+  }
+
+  // use ID's
+  function cancelProject() {
+    const formPopup = document.querySelector("#popup-project");
+    const pageMask = document.querySelector("#page-mask-project");
+    formPopup.style.display = "none";
+    pageMask.style.display = "none";
+  }
+
+  function cancelTask() {
+    const formPopup = document.querySelector("#formAddTask");
+    const pageMask = document.querySelector("#page-mask-task");
+    formPopup.style.display = "none";
+    pageMask.style.display = "none";
+  }
+}
+
+displayController();
 
 let count = 0;
 const counts = () => {
@@ -165,36 +214,6 @@ function attachEventListenerToTaskIcons(e) {
       targetDivsGrandparent.remove();
     })
   );
-}
-
-function popupTask() {
-  const formPopup = document.querySelector("#formAddTask");
-  const pageMask = document.querySelector("#page-mask-task");
-  formPopup.style.display = "block";
-  pageMask.style.display = "block";
-}
-
-// use ID's
-function popupNewProject() {
-  const formPopup = document.querySelector("#popup-project");
-  const pageMask = document.querySelector("#page-mask-project");
-  formPopup.style.display = "block";
-  pageMask.style.display = "block";
-}
-
-// use ID's
-function cancelProject() {
-  const formPopup = document.querySelector("#popup-project");
-  const pageMask = document.querySelector("#page-mask-project");
-  formPopup.style.display = "none";
-  pageMask.style.display = "none";
-}
-
-function cancelTask() {
-  const formPopup = document.querySelector("#formAddTask");
-  const pageMask = document.querySelector("#page-mask-task");
-  formPopup.style.display = "none";
-  pageMask.style.display = "none";
 }
 
 function addNewProject(e) {
