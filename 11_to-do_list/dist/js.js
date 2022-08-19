@@ -33,13 +33,22 @@ function displayController() {
   const btnSubmitProject = document.getElementById("btnProjectSubmit");
   const btnSubmitTask = document.getElementById("btnTaskSubmit");
 
-  btnAddProject.addEventListener(
-    "click",
-    changeDisplayType("block", ["popup-project", "page-mask-project"])
-  );
-  btnAddTask.addEventListener("click", popupTask);
-  btnCancelProject.addEventListener("click", cancelProject);
-  btnCancelTask.addEventListener("click", cancelTask);
+  btnAddProject.addEventListener("click", () => {
+    changeDisplayType("block", ["popup-project", "page-mask-project"]);
+  });
+
+  btnAddTask.addEventListener("click", () => {
+    changeDisplayType("block", ["formAddTask", "page-mask-task"]);
+  });
+
+  btnCancelProject.addEventListener("click", () => {
+    changeDisplayType("none", ["popup-project", "page-mask-project"]);
+  });
+
+  btnCancelTask.addEventListener("click", () => {
+    changeDisplayType("none", ["formAddTask", "page-mask-task"]);
+  });
+
   btnSubmitProject.addEventListener("click", addNewProject);
   btnSubmitTask.addEventListener("click", addNewTask);
 
@@ -54,35 +63,6 @@ function displayController() {
     const element2 = document.querySelector(`#${id2}`);
     element1.style.display = displayType;
     element2.style.display = displayType;
-  }
-
-  function popupNewProject() {
-    const formPopup = document.querySelector("#popup-project");
-    const pageMask = document.querySelector("#page-mask-project");
-    formPopup.style.display = "block";
-    pageMask.style.display = "block";
-  }
-
-  function popupTask() {
-    const formPopup = document.querySelector("#formAddTask");
-    const pageMask = document.querySelector("#page-mask-task");
-    formPopup.style.display = "block";
-    pageMask.style.display = "block";
-  }
-
-  // use ID's
-  function cancelProject() {
-    const formPopup = document.querySelector("#popup-project");
-    const pageMask = document.querySelector("#page-mask-project");
-    formPopup.style.display = "none";
-    pageMask.style.display = "none";
-  }
-
-  function cancelTask() {
-    const formPopup = document.querySelector("#formAddTask");
-    const pageMask = document.querySelector("#page-mask-task");
-    formPopup.style.display = "none";
-    pageMask.style.display = "none";
   }
 }
 
