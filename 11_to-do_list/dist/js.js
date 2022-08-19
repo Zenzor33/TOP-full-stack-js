@@ -1,9 +1,28 @@
 /*
 
-Algorithm:
+Principles for refactoring:
 
-- Delete task from myTasks when trash icon is clicked
-- Delete div with
+1) Single responsibility
+- A class (or object or module.. you get the point) should only have one responsibility. This doesn’t mean that an object can only do one thing, but it does mean that everything an object does should be part of one responsibility.
+
+2) Separate your DOM stuff from the application logic.
+
+3. S.O.L.I.D
+------
+S — Single responsibility principle
+O — Open closed principle
+L — Liskov substitution principle
+I — Interface segregation principle
+D — Dependency Inversion principle
+
+Understanding the program
+
+Backend:
+- A factory function creates new projects
+- A factory function creates new tasks
+
+DOM manipulation:
+- Separate the DOM manipulation from the backend, via a module?
 */
 
 const btnAddProject = document.getElementById("btn-add-project");
