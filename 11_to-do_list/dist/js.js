@@ -25,7 +25,153 @@ DOM manipulation:
 - Separate the DOM manipulation from the backend, via a module?
 */
 
-function displayController() {
+const displayController = () => {
+  const changeDisplayType = (displayType, ...ElementId) => {
+    const arr = ElementId;
+    const id1 = arr[0][0];
+    const id2 = arr[0][1];
+    const element1 = document.querySelector(`#${id1}`);
+    const element2 = document.querySelector(`#${id2}`);
+    element1.style.display = displayType;
+    element2.style.display = displayType;
+  };
+
+  const attachEventListenerToTaskIcons = (e) => {
+    const targetDivs = document.querySelectorAll(".task-icon-trash");
+
+    targetDivs.forEach((element) =>
+      element.addEventListener("click", (e) => {
+        const target = e.target;
+        const targetDivsParent = target.parentElement;
+        const targetDivsGrandparent = targetDivsParent.parentElement;
+        for (let i = 0; i < myTasks.length; i++) {
+          if (targetDivsGrandparent.id == myTasks[i].taskId) {
+            const index = myTasks.indexOf(myTasks[i]);
+            myTasks.splice(index, 1);
+            i--;
+          }
+        }
+        targetDivsGrandparent.remove();
+      })
+    );
+  };
+
+  const loadTasks = (projectId) => {
+    // load each element of myTasks with projectId property value of the parameter.
+    const container = document.getElementById("tasks-container");
+    container.innerHTML = "";
+
+    // This code is for the INITAL LOADING OF TASKS when a user selects a different project
+    const theArray = findElements(projectId);
+    resetSomeElements();
+    theArray.forEach((element) => {
+      const divTask = document.createElement("div");
+      divTask.classList.add("task");
+      divTask.innerHTML = `<div class="task-title">Task title: ${element.taskTitle}</div>
+    <div class="task-description">Task description: ${element.description} </div>
+    <div class="task-due-date">Task due date:</div>
+    <div class="task-priority">Task priority:</div>
+    <div class="task-notes">Task notes: ${element.notes} </div>
+    <div class="task-projectId">Project Id: ${element.projectId}</div>
+    <div class="taskID">Task Id: ${element.taskId} </div>
+    <div class="task-icon-container">
+      <div class="task-icon-edit">[edit icon]</div>
+      <div class="task-icon-trash">[trash icon]</div>
+    </div>
+  </div>`;
+      attachEventListenerToTaskIcons();
+      container.appendChild(divTask);
+    });
+  };
+
+  const createProject = (e) => {
+    e.preventDefault();
+    const container = document.getElementById("projects-container");
+
+    // DOM stuff start
+
+    // Create div, add class and id
+    const divProject = document.createElement("div");
+    divProject.classList.add("project");
+    divProject.setAttribute("id", count + 1);
+
+    // Handles the highlighting and unhighlighting of the new div
+    divProject.addEventListener("click", () => {
+      const divPrevSelected = document.querySelector(".highlight");
+      // removes highlighting of previous selected div
+      if (divPrevSelected) divPrevSelected.classList.remove("highlight");
+      // highlights the clicked div
+      divProject.classList.add("highlight");
+      loadTasks(divProject.id);
+    });
+
+    // Styles the font of text in the div
+    const divProjectText = document.createElement("div");
+    divProjectText.classList.add("project-text");
+
+    // Gets user input value for project name and stores in div's text.
+    const userInputField = document.getElementById("project-name");
+    const projectName = userInputField.value;
+    divProjectText.innerText = projectName;
+    divProject.appendChild(divProjectText);
+
+    // Creates trash icon and adds event listener
+    const divProjectIcon = document.createElement("project-icon");
+    divProjectIcon.classList.add("project-icon");
+    divProjectIcon.innerText = "[trash-icon]";
+    divProjectIcon.addEventListener("click", deleteProject);
+    divProject.appendChild(divProjectIcon);
+
+    // Appends the project div to the container
+    container.appendChild(divProject);
+
+    // Removes the popup
+    changeDisplayType("none", ["popup-project", "page-mask-project"]);
+
+    // Not DOM stuff
+    createTheProject(projectName);
+  };
+
+  const addNewTask = (e) => {
+    e.preventDefault();
+    const container = document.getElementById("tasks-container");
+
+    const taskTitle = document.getElementById("task-title").value;
+    const description = document.getElementById("task-description").value;
+    const notes = document.getElementById("task-notes").value;
+    const selectedProject = document.querySelector(".highlight");
+    const projectId = selectedProject.getAttribute("id");
+
+    // not Dom stuff below
+    const thisTask = taskFactory(projectId, taskTitle, description, notes);
+    myTasks.push(thisTask);
+
+    // the taskId is generated in the taskFactory function
+    const taskId = thisTask.taskId;
+    // not DOM stuff above
+
+    const divTask = document.createElement("div");
+    divTask.classList.add("task");
+    divTask.setAttribute("id", taskId);
+    divTask.innerHTML = `<div class="task-title">Task title: ${taskTitle}</div>
+    <div class="task-description">Task description: ${description} </div>
+    <div class="task-due-date">Task due date:</div>
+    <div class="task-priority">Task priority:</div>
+    <div class="task-notes">Task notes: ${notes} </div>
+    <div class="task-projectId">Project Id: ${projectId}</div>
+    <div class="taskID">Task Id: ${taskId} </div>
+    <div class="task-icon-container">
+      <div class="task-icon-edit">[edit icon]</div>
+      <div class="task-icon-trash">[trash icon]</div>
+    </div>
+  </div>`;
+    container.appendChild(divTask);
+    // Here, we need to add an event listener individually or run the attach all.
+    attachEventListenerToTaskIcons();
+
+    changeDisplayType("none", ["formAddTask", "page-mask-task"]);
+  };
+
   const btnAddProject = document.getElementById("btn-add-project");
   const btnAddTask = document.getElementById("btn-add-task");
   const btnCancelProject = document.getElementById("project-btn-cancel");
@@ -36,35 +182,18 @@ function displayController() {
   btnAddProject.addEventListener("click", () => {
     changeDisplayType("block", ["popup-project", "page-mask-project"]);
   });
-
   btnAddTask.addEventListener("click", () => {
     changeDisplayType("block", ["formAddTask", "page-mask-task"]);
   });
-
   btnCancelProject.addEventListener("click", () => {
     changeDisplayType("none", ["popup-project", "page-mask-project"]);
   });
-
   btnCancelTask.addEventListener("click", () => {
     changeDisplayType("none", ["formAddTask", "page-mask-task"]);
   });
-
-  btnSubmitProject.addEventListener("click", addNewProject);
+  btnSubmitProject.addEventListener("click", createProject);
   btnSubmitTask.addEventListener("click", addNewTask);
-
-  // function that accepts parameters of [array of elementId's] and displayType
-
-  function changeDisplayType(displayType, ...ElementId) {
-    const arr = ElementId;
-    const id1 = arr[0][0];
-    const id2 = arr[0][1];
-
-    const element1 = document.querySelector(`#${id1}`);
-    const element2 = document.querySelector(`#${id2}`);
-    element1.style.display = displayType;
-    element2.style.display = displayType;
-  }
-}
+};
 
 displayController();
 
@@ -104,138 +233,6 @@ function findElements(id) {
 
 function resetSomeElements() {
   someElements = [];
-}
-
-function loadTasks(projectId) {
-  // load each element of myTasks with projectId property value of the parameter.
-  const container = document.getElementById("tasks-container");
-  container.innerHTML = "";
-  console.log("reset");
-
-  // This code is for the INITAL LOADING OF TASKS when a user selects a different project
-  const theArray = findElements(projectId);
-  resetSomeElements();
-  theArray.forEach((element) => {
-    const divTask = document.createElement("div");
-    divTask.classList.add("task");
-    divTask.innerHTML = `<div class="task-title">Task title: ${element.taskTitle}</div>
-  <div class="task-description">Task description: ${element.description} </div>
-  <div class="task-due-date">Task due date:</div>
-  <div class="task-priority">Task priority:</div>
-  <div class="task-notes">Task notes: ${element.notes} </div>
-  <div class="task-projectId">Project Id: ${element.projectId}</div>
-  <div class="taskID">Task Id: ${element.taskId} </div>
-  <div class="task-icon-container">
-    <div class="task-icon-edit">[edit icon]</div>
-    <div class="task-icon-trash">[trash icon]</div>
-  </div>
-</div>`;
-    attachEventListenerToTaskIcons();
-    container.appendChild(divTask);
-  });
-}
-
-function addNewTask(e) {
-  // create new div with class task
-  // append the innerhtml to this div
-  e.preventDefault();
-  const container = document.getElementById("tasks-container");
-
-  // get info from form and create instance of object taskFactory
-  const taskTitle = document.getElementById("task-title").value;
-  const description = document.getElementById("task-description").value;
-  const notes = document.getElementById("task-notes").value;
-  const selectedProject = document.querySelector(".highlight");
-  const projectId = selectedProject.getAttribute("id");
-
-  const thisTask = taskFactory(projectId, taskTitle, description, notes);
-  myTasks.push(thisTask);
-
-  const taskId = thisTask.taskId;
-
-  const divTask = document.createElement("div");
-  divTask.classList.add("task");
-  divTask.setAttribute("id", taskId);
-  divTask.innerHTML = `<div class="task-title">Task title: ${taskTitle}</div>
-  <div class="task-description">Task description: ${description} </div>
-  <div class="task-due-date">Task due date:</div>
-  <div class="task-priority">Task priority:</div>
-  <div class="task-notes">Task notes: ${notes} </div>
-  <div class="task-projectId">Project Id: ${projectId}</div>
-  <div class="taskID">Task Id: ${taskId} </div>
-  <div class="task-icon-container">
-    <div class="task-icon-edit">[edit icon]</div>
-    <div class="task-icon-trash">[trash icon]</div>
-  </div>
-</div>`;
-  container.appendChild(divTask);
-  // Here, we need to add an event listener individually or run the attach all.
-  attachEventListenerToTaskIcons();
-
-  cancelTask();
-}
-
-function attachEventListenerToTaskIcons(e) {
-  const targetDivs = document.querySelectorAll(".task-icon-trash");
-
-  targetDivs.forEach((element) =>
-    element.addEventListener("click", (e) => {
-      const target = e.target;
-      const targetDivsParent = target.parentElement;
-      const targetDivsGrandparent = targetDivsParent.parentElement;
-      console.log("here");
-      for (let i = 0; i < myTasks.length; i++) {
-        if (targetDivsGrandparent.id == myTasks[i].taskId) {
-          const index = myTasks.indexOf(myTasks[i]);
-          myTasks.splice(index, 1);
-          i--;
-        }
-      }
-      targetDivsGrandparent.remove();
-    })
-  );
-}
-
-function addNewProject(e) {
-  e.preventDefault();
-
-  const container = document.getElementById("projects-container");
-
-  const divProject = document.createElement("div");
-  divProject.classList.add("project");
-  divProject.setAttribute("id", count + 1);
-
-  divProject.addEventListener("click", () => {
-    const divPrevSelected = document.querySelector(".highlight");
-    if (divPrevSelected) divPrevSelected.classList.remove("highlight");
-    divProject.classList.add("highlight");
-    loadTasks(divProject.id);
-  });
-
-  const divProjectText = document.createElement("div");
-  divProjectText.classList.add("project-text");
-  //   divProjectText.setAttribute("id", count + 1);
-
-  // change below this line
-  const userInputField = document.getElementById("project-name");
-  const projectName = userInputField.value;
-  divProjectText.innerText = projectName;
-  // change above this line
-  divProject.appendChild(divProjectText);
-
-  const divProjectIcon = document.createElement("project-icon");
-  divProjectIcon.classList.add("project-icon");
-  divProjectIcon.innerText = "[trash-icon]";
-
-  divProject.appendChild(divProjectIcon);
-
-  container.appendChild(divProject);
-
-  createTheProject(projectName);
-
-  divProjectIcon.addEventListener("click", deleteProject);
-
-  cancelProject();
 }
 
 function deleteProject(e) {
