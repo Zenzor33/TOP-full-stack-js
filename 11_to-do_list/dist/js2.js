@@ -23,6 +23,19 @@ Backend:
 
 DOM manipulation:
 - Separate the DOM manipulation from the backend, via a module?
+
+How to refactor the code using object orietned programming:
+
+eventHandler object:
+- Stores all the event listeners
+
+appLogic object:
+- 
+
+DisplayController object:
+- function addNewTask handles DOM for when user presses the 'submit' button in the Task popup.
+
+
 */
 
 const displayController = (() => {
@@ -68,17 +81,17 @@ const displayController = (() => {
       const divTask = document.createElement("div");
       divTask.classList.add("task");
       divTask.innerHTML = `<div class="task-title">Task title: ${element.taskTitle}</div>
-    <div class="task-description">Task description: ${element.description} </div>
-    <div class="task-due-date">Task due date:</div>
-    <div class="task-priority">Task priority:</div>
-    <div class="task-notes">Task notes: ${element.notes} </div>
-    <div class="task-projectId">Project Id: ${element.projectId}</div>
-    <div class="taskID">Task Id: ${element.taskId} </div>
-    <div class="task-icon-container">
-      <div class="task-icon-edit">[edit icon]</div>
-      <div class="task-icon-trash">[trash icon]</div>
-    </div>
-  </div>`;
+        <div class="task-description">Task description: ${element.description} </div>
+        <div class="task-due-date">Task due date:</div>
+        <div class="task-priority">Task priority:</div>
+        <div class="task-notes">Task notes: ${element.notes} </div>
+        <div class="task-projectId">Project Id: ${element.projectId}</div>
+        <div class="taskID">Task Id: ${element.taskId} </div>
+        <div class="task-icon-container">
+          <div class="task-icon-edit">[edit icon]</div>
+          <div class="task-icon-trash">[trash icon]</div>
+        </div>
+      </div>`;
       attachEventListenerToTaskIcons();
       container.appendChild(divTask);
     });
@@ -154,24 +167,27 @@ const displayController = (() => {
     divTask.classList.add("task");
     divTask.setAttribute("id", taskId);
     divTask.innerHTML = `<div class="task-title">Task title: ${taskTitle}</div>
-    <div class="task-description">Task description: ${description} </div>
-    <div class="task-due-date">Task due date:</div>
-    <div class="task-priority">Task priority:</div>
-    <div class="task-notes">Task notes: ${notes} </div>
-    <div class="task-projectId">Project Id: ${projectId}</div>
-    <div class="taskID">Task Id: ${taskId} </div>
-    <div class="task-icon-container">
-      <div class="task-icon-edit">[edit icon]</div>
-      <div class="task-icon-trash">[trash icon]</div>
-    </div>
-  </div>`;
+        <div class="task-description">Task description: ${description} </div>
+        <div class="task-due-date">Task due date:</div>
+        <div class="task-priority">Task priority:</div>
+        <div class="task-notes">Task notes: ${notes} </div>
+        <div class="task-projectId">Project Id: ${projectId}</div>
+        <div class="taskID">Task Id: ${taskId} </div>
+        <div class="task-icon-container">
+          <div class="task-icon-edit">[edit icon]</div>
+          <div class="task-icon-trash">[trash icon]</div>
+        </div>
+      </div>`;
     container.appendChild(divTask);
     // Here, we need to add an event listener individually or run the attach all.
     attachEventListenerToTaskIcons();
 
     changeDisplayType("none", ["formAddTask", "page-mask-task"]);
   };
+  return { changeDisplayType, createProject, addNewTask };
+})();
 
+const eventHandler = (() => {
   const btnAddProject = document.getElementById("btn-add-project");
   const btnAddTask = document.getElementById("btn-add-task");
   const btnCancelProject = document.getElementById("project-btn-cancel");
@@ -180,19 +196,31 @@ const displayController = (() => {
   const btnSubmitTask = document.getElementById("btnTaskSubmit");
 
   btnAddProject.addEventListener("click", () => {
-    changeDisplayType("block", ["popup-project", "page-mask-project"]);
+    displayController.changeDisplayType("block", [
+      "popup-project",
+      "page-mask-project",
+    ]);
   });
   btnAddTask.addEventListener("click", () => {
-    changeDisplayType("block", ["formAddTask", "page-mask-task"]);
+    displayController.changeDisplayType("block", [
+      "formAddTask",
+      "page-mask-task",
+    ]);
   });
   btnCancelProject.addEventListener("click", () => {
-    changeDisplayType("none", ["popup-project", "page-mask-project"]);
+    displayController.changeDisplayType("none", [
+      "popup-project",
+      "page-mask-project",
+    ]);
   });
   btnCancelTask.addEventListener("click", () => {
-    changeDisplayType("none", ["formAddTask", "page-mask-task"]);
+    displayController.changeDisplayType("none", [
+      "formAddTask",
+      "page-mask-task",
+    ]);
   });
-  btnSubmitProject.addEventListener("click", createProject);
-  btnSubmitTask.addEventListener("click", addNewTask);
+  btnSubmitProject.addEventListener("click", displayController.createProject);
+  btnSubmitTask.addEventListener("click", displayController.addNewTask);
 })();
 
 const myProjects = [];
