@@ -34,27 +34,24 @@ const displayController = (() => {
     element2.style.display = displayType;
   };
 
-  let currentTasksInDom = [];
   const updateTasksDisplay = (projectId) => {
-    // Get the project.id from each task
-    // If project.id === task.projectId && !currentTasksInDom.includes(task.projectId) {addTaskToDom; add task.projectId to currentTasksInDom }
+    const tasksContainer = document.getElementById("tasks-container");
+    tasksContainer.innerHTML = "";
+
     myTasks.forEach((task) => {
-      if (
-        task.projectId == projectId &&
-        !currentTasksInDom.includes(task.projectId)
-      ) {
+      if (task.projectId == projectId) {
         const container = document.getElementById("tasks-container");
         const divTask = document.createElement("div");
 
         divTask.classList.add("task");
         divTask.setAttribute("id", taskId);
-        divTask.innerHTML = `<div class="task-title">Task title: ${taskTitle}</div>
-    <div class="task-description">Task description: ${description} </div>
+        divTask.innerHTML = `<div class="task-title">Task title: ${task.taskTitle}</div>
+    <div class="task-description">Task description: ${task.description} </div>
     <div class="task-due-date">Task due date:</div>
     <div class="task-priority">Task priority:</div>
-    <div class="task-notes">Task notes: ${notes} </div>
-    <div class="task-projectId">Project Id: ${projectId}</div>
-    <div class="taskID">Task Id: ${taskId} </div>
+    <div class="task-notes">Task notes: ${task.notes} </div>
+    <div class="task-projectId">Project Id: ${task.projectId}</div>
+    <div class="taskID">Task Id: ${task.taskId} </div>
     <div class="task-icon-container">
       <div class="task-icon-edit">[edit icon]</div>
       <div class="task-icon-trash">[trash icon]</div>
@@ -62,20 +59,22 @@ const displayController = (() => {
   </div>`;
 
         container.appendChild(divTask);
-        currentTasksInDom.push(task.projectId);
       }
     });
   };
 
+  const deleteProject = (projectId) => {
+    // splice project from myProjects
+    // find all tasks with projectId and splice them from myTasks
+    // run updateProjectsDisplay() -- this should also trigger updateTasksDisplay
+    console.log("delete Project");
+    console.log(projectId);
+    // console.log(projectId);
+  };
+
   let currentProjectsInDOM = [];
   const updateProjectsDisplay = () => {
-    // This logic determines what happens when myProjects array is modified
-    // for each i, create projects div and append to container
-    // create an array that contains the element.id of each element in myProjects
-
     myProjects.forEach((element) => {
-      // create an array that contains the element.id of each element in myProjects
-      // if element.id is not a value of myProjects.id, continue
       if (!currentProjectsInDOM.includes(element.id)) {
         currentProjectsInDOM.push(element.id);
         const container = document.getElementById("projects-container");
@@ -84,6 +83,7 @@ const displayController = (() => {
         const userInputField = document.getElementById("project-name");
         const projectName = userInputField.value;
         const divProjectIcon = document.createElement("div");
+        const elemId = element.id;
 
         divProject.classList.add("project");
         divProject.setAttribute("id", element.id); // probably??
@@ -93,6 +93,7 @@ const displayController = (() => {
           const divPrevSelected = document.querySelector(".highlight");
           if (divPrevSelected) divPrevSelected.classList.remove("highlight");
           divProject.classList.add("highlight");
+          displayController.updateTasksDisplay(element.id);
         });
         // Styles the font of text in the div
         divProjectText.classList.add("project-text");
@@ -103,7 +104,11 @@ const displayController = (() => {
         // Creates trash icon and adds event listener
         divProjectIcon.classList.add("project-icon");
         divProjectIcon.innerText = "[trash-icon]";
-        //   divProjectIcon.addEventListener("click", deleteProject);
+        // divProjectIcon.addEventListener("click", deleteProject(element.id));
+        divProjectIcon.addEventListener(
+          "click",
+          displayController.deleteProject(elemId)
+        );
 
         divProject.appendChild(divProjectText);
         divProject.appendChild(divProjectIcon);
@@ -111,7 +116,12 @@ const displayController = (() => {
       }
     });
   };
-  return { changeDisplayType, updateProjectsDisplay, updateTasksDisplay };
+  return {
+    changeDisplayType,
+    updateProjectsDisplay,
+    updateTasksDisplay,
+    deleteProject,
+  };
 })();
 
 const appLogic = (() => {
