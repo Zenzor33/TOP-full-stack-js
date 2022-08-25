@@ -69,11 +69,6 @@ const displayController = (() => {
   };
 
   const deleteProject = (projectId) => {
-    // splice project from myProjects
-    // find all tasks with projectId and splice them from myTasks
-    // run updateProjectsDisplay() -- this should also trigger updateTasksDisplay
-
-    // delete project from myProject arrray
     for (let i = 0; i < myProjects.length; i++) {
       // Note the ==
       if (projectId == myProjects[i].id) {
@@ -124,7 +119,6 @@ const displayController = (() => {
       // Creates trash icon and adds event listener
       divProjectIcon.classList.add("project-icon");
       divProjectIcon.innerText = "[trash-icon]";
-      // divProjectIcon.addEventListener("click", deleteProject(element.id));
       divProjectIcon.addEventListener("click", () => {
         deleteProject(elemId);
       });
@@ -164,7 +158,7 @@ const appLogic = (() => {
     const notes = document.getElementById("task-notes").value;
     const selectedProject = document.querySelector(".highlight");
     const projectId = selectedProject.getAttribute("id");
-    // push task to myTasks and execute displayController.updateTasksDisplay()
+
     const thisTask = taskFactory(projectId, taskTitle, description, notes);
     myTasks.push(thisTask);
     // removes popup
@@ -177,7 +171,7 @@ const appLogic = (() => {
   };
 
   const createProject = (e) => {
-    // createProject: pushes project to myProjects and updateProjectDisplay()
+    // pushes project to myProjects and updateProjectDisplay()
     e.preventDefault();
     const userInputField = document.getElementById("project-name");
     const projectName = userInputField.value;
