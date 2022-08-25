@@ -1,19 +1,3 @@
-/*
-Algorithm:
-- Three objects:
-1) eventHandler - stores eventListeners for html
-2) displayController
-- updateProjectDisplay: loops through myProjects array
-- updateTaskDisplay: loops through myTasks array, and displays the appropriate tasks (matched to projectId selected)
-- changeDisplayType: makes popups disappear
-3) appLogic
-- createProject: pushes project to myProjects and updateProjectDisplay()
-- createTask: pushes task to myTasks
-4) global variables:
-- myProjects
-- myTasks
-*/
-
 const myProjects = [];
 const myTasks = [];
 
@@ -32,6 +16,26 @@ const displayController = (() => {
     const element2 = document.querySelector(`#${id2}`);
     element1.style.display = displayType;
     element2.style.display = displayType;
+  };
+
+  const addEventListenerToTaskIcons = () => {
+    const targetDivs = document.querySelectorAll(".task-icon-trash");
+
+    targetDivs.forEach((element) =>
+      element.addEventListener("click", (e) => {
+        const target = e.target;
+        const targetDivsParent = target.parentElement;
+        const targetDivsGrandparent = targetDivsParent.parentElement;
+        for (let i = 0; i < myTasks.length; i++) {
+          if (targetDivsGrandparent.id == myTasks[i].taskId) {
+            const index = myTasks.indexOf(myTasks[i]);
+            myTasks.splice(index, 1);
+            i--;
+          }
+        }
+        targetDivsGrandparent.remove();
+      })
+    );
   };
 
   const updateTasksDisplay = (projectId) => {
@@ -61,66 +65,79 @@ const displayController = (() => {
         container.appendChild(divTask);
       }
     });
+    addEventListenerToTaskIcons();
   };
 
   const deleteProject = (projectId) => {
     // splice project from myProjects
     // find all tasks with projectId and splice them from myTasks
     // run updateProjectsDisplay() -- this should also trigger updateTasksDisplay
-    console.log("delete Project");
-    console.log(projectId);
-    // console.log(projectId);
+
+    // delete project from myProject arrray
+    for (let i = 0; i < myProjects.length; i++) {
+      // Note the ==
+      if (projectId == myProjects[i].id) {
+        let indexValue = myProjects.indexOf(myProjects[i]);
+        myProjects.splice(indexValue, 1);
+      }
+    }
+    // delete tasks (with projectId) from myTasks array
+    for (let i = 0; i < myTasks.length; i++) {
+      if (projectId == myTasks[i].projectId) {
+        const indexValue = myTasks.indexOf(myTasks[i]);
+        myTasks.splice(indexValue, 1);
+        i--;
+      }
+    }
+    updateProjectsDisplay();
   };
 
-  let currentProjectsInDOM = [];
   const updateProjectsDisplay = () => {
+    const projectsContainer = document.getElementById("projects-container");
+    projectsContainer.innerHTML = "";
+
     myProjects.forEach((element) => {
-      if (!currentProjectsInDOM.includes(element.id)) {
-        currentProjectsInDOM.push(element.id);
-        const container = document.getElementById("projects-container");
-        const divProject = document.createElement("div");
-        const divProjectText = document.createElement("div");
-        const userInputField = document.getElementById("project-name");
-        const projectName = userInputField.value;
-        const divProjectIcon = document.createElement("div");
-        const elemId = element.id;
+      const container = document.getElementById("projects-container");
+      const divProject = document.createElement("div");
+      const divProjectText = document.createElement("div");
+      const userInputField = document.getElementById("project-name");
+      const projectName = userInputField.value;
+      const divProjectIcon = document.createElement("div");
+      const elemId = element.id;
 
-        divProject.classList.add("project");
-        divProject.setAttribute("id", element.id); // probably??
+      divProject.classList.add("project");
+      divProject.setAttribute("id", element.id); // probably??
 
-        // Handles the highlighting and unhighlighting of the new div
-        divProject.addEventListener("click", () => {
-          const divPrevSelected = document.querySelector(".highlight");
-          if (divPrevSelected) divPrevSelected.classList.remove("highlight");
-          divProject.classList.add("highlight");
-          displayController.updateTasksDisplay(element.id);
-        });
-        // Styles the font of text in the div
-        divProjectText.classList.add("project-text");
+      // Handles the highlighting and unhighlighting of the new div
+      divProject.addEventListener("click", () => {
+        const divPrevSelected = document.querySelector(".highlight");
+        if (divPrevSelected) divPrevSelected.classList.remove("highlight");
+        divProject.classList.add("highlight");
+        displayController.updateTasksDisplay(element.id);
+      });
+      // Styles the font of text in the div
+      divProjectText.classList.add("project-text");
 
-        // Gets user input value for project name and stores in div's text.
-        divProjectText.innerText = projectName;
+      // Gets user input value for project name and stores in div's text.
+      divProjectText.innerText = projectName;
 
-        // Creates trash icon and adds event listener
-        divProjectIcon.classList.add("project-icon");
-        divProjectIcon.innerText = "[trash-icon]";
-        // divProjectIcon.addEventListener("click", deleteProject(element.id));
-        divProjectIcon.addEventListener(
-          "click",
-          displayController.deleteProject(elemId)
-        );
+      // Creates trash icon and adds event listener
+      divProjectIcon.classList.add("project-icon");
+      divProjectIcon.innerText = "[trash-icon]";
+      // divProjectIcon.addEventListener("click", deleteProject(element.id));
+      divProjectIcon.addEventListener("click", () => {
+        deleteProject(elemId);
+      });
 
-        divProject.appendChild(divProjectText);
-        divProject.appendChild(divProjectIcon);
-        container.appendChild(divProject);
-      }
+      divProject.appendChild(divProjectText);
+      divProject.appendChild(divProjectIcon);
+      container.appendChild(divProject);
     });
   };
   return {
     changeDisplayType,
     updateProjectsDisplay,
     updateTasksDisplay,
-    deleteProject,
   };
 })();
 
