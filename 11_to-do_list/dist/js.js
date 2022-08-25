@@ -23,6 +23,14 @@ Backend:
 
 DOM manipulation:
 - Separate the DOM manipulation from the backend, via a module?
+
+How to refactor the code using object orietned programming:
+
+DisplayController object:
+- function addNewTask handles DOM for when user presses the 'submit' button in the Task popup.
+
+appLogic object:
+- 
 */
 
 const displayController = (() => {
@@ -63,7 +71,7 @@ const displayController = (() => {
 
     // This code is for the INITAL LOADING OF TASKS when a user selects a different project
     const theArray = findElements(projectId);
-    resetSomeElements();
+    resetTaskElements();
     theArray.forEach((element) => {
       const divTask = document.createElement("div");
       divTask.classList.add("task");
@@ -116,7 +124,7 @@ const displayController = (() => {
     divProject.appendChild(divProjectText);
 
     // Creates trash icon and adds event listener
-    const divProjectIcon = document.createElement("project-icon");
+    const divProjectIcon = document.createElement("div");
     divProjectIcon.classList.add("project-icon");
     divProjectIcon.innerText = "[trash-icon]";
     divProjectIcon.addEventListener("click", deleteProject);
@@ -229,7 +237,7 @@ function findElements(id) {
   return someElements;
 }
 
-function resetSomeElements() {
+function resetTaskElements() {
   someElements = [];
 }
 
