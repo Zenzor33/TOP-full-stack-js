@@ -18,6 +18,7 @@ const displayController = (() => {
     element2.style.display = displayType;
   };
 
+  // this should go in eventHandler?
   const addEventListenerToTaskIcons = () => {
     const targetDivs = document.querySelectorAll(".task-icon-trash");
 
@@ -38,6 +39,7 @@ const displayController = (() => {
     );
   };
 
+  // attach data attribute to trash icon?
   const updateTasksDisplay = (projectId) => {
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
@@ -58,7 +60,7 @@ const displayController = (() => {
     <div class="taskID">Task Id: ${task.taskId} </div>
     <div class="task-icon-container">
       <div class="task-icon-edit">[edit icon]</div>
-      <div class="task-icon-trash">[trash icon]</div>
+      <div class="task-icon-trash" data-taskid="${task.taskId}">[trash icon]</div>
     </div>
   </div>`;
 
@@ -101,7 +103,7 @@ const displayController = (() => {
       divProjectIcon.classList.add("project-icon");
       divProjectIcon.innerText = "[trash-icon]";
       divProjectIcon.addEventListener("click", () => {
-        appLogic.deleteTheProject(elemId);
+        appLogic.deleteProject(elemId);
         updateProjectsDisplay();
       });
 
@@ -118,7 +120,7 @@ const displayController = (() => {
 })();
 
 const appLogic = (() => {
-  const deleteTheProject = (projectId) => {
+  const deleteProject = (projectId) => {
     for (let i = 0; i < myProjects.length; i++) {
       // Note the ==
       if (projectId == myProjects[i].id) {
@@ -184,7 +186,7 @@ const appLogic = (() => {
     ]);
     displayController.updateProjectsDisplay();
   };
-  return { createProject, createTask, deleteTheProject };
+  return { createProject, createTask, deleteProject };
 })();
 
 const eventHandler = (() => {
