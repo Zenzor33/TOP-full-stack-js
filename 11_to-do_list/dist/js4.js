@@ -18,28 +18,6 @@ const displayController = (() => {
     element2.style.display = displayType;
   };
 
-  // this should go in eventHandler?
-  const addEventListenerToTaskIcons = () => {
-    const targetDivs = document.querySelectorAll(".task-icon-trash");
-
-    targetDivs.forEach((element) =>
-      element.addEventListener("click", (e) => {
-        const target = e.target;
-        const targetDivsParent = target.parentElement;
-        const targetDivsGrandparent = targetDivsParent.parentElement;
-        for (let i = 0; i < myTasks.length; i++) {
-          if (targetDivsGrandparent.id == myTasks[i].taskId) {
-            const index = myTasks.indexOf(myTasks[i]);
-            myTasks.splice(index, 1);
-            i--;
-          }
-        }
-        targetDivsGrandparent.remove();
-      })
-    );
-  };
-
-  // attach data attribute to trash icon?
   const updateTasksDisplay = (projectId) => {
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
@@ -67,7 +45,7 @@ const displayController = (() => {
         container.appendChild(divTask);
       }
     });
-    addEventListenerToTaskIcons();
+    eventHandler.addEventListenerToTaskIcons();
   };
 
   const updateProjectsDisplay = () => {
@@ -102,10 +80,7 @@ const displayController = (() => {
       // Creates trash icon and adds event listener
       divProjectIcon.classList.add("project-icon");
       divProjectIcon.innerText = "[trash-icon]";
-      divProjectIcon.addEventListener("click", () => {
-        appLogic.deleteProject(elemId);
-        updateProjectsDisplay();
-      });
+      eventHandler.addEventListenerToProjectIcon(divProjectIcon, elemId);
 
       divProject.appendChild(divProjectText);
       divProject.appendChild(divProjectIcon);
@@ -120,6 +95,15 @@ const displayController = (() => {
 })();
 
 const appLogic = (() => {
+  const deleteTask = (taskId) => {
+    for (let i = 0; i < myTasks.length; i++) {
+      if (taskId == myTasks[i].taskId) {
+        const index = myTasks.indexOf(myTasks[i]);
+        myTasks.splice(index, 1);
+        i--;
+      }
+    }
+  };
   const deleteProject = (projectId) => {
     for (let i = 0; i < myProjects.length; i++) {
       // Note the ==
@@ -186,7 +170,7 @@ const appLogic = (() => {
     ]);
     displayController.updateProjectsDisplay();
   };
-  return { createProject, createTask, deleteProject };
+  return { createProject, createTask, deleteProject, deleteTask };
 })();
 
 const eventHandler = (() => {
@@ -223,4 +207,28 @@ const eventHandler = (() => {
   });
   btnSubmitProject.addEventListener("click", appLogic.createProject);
   btnSubmitTask.addEventListener("click", appLogic.createTask);
+
+  const addEventListenerToTaskIcons = () => {
+    const targetDivs = document.querySelectorAll(".task-icon-trash");
+
+    targetDivs.forEach((element) =>
+      element.addEventListener("click", (e) => {
+        const target = e.target;
+        const taskId = target.getAttribute("data-taskid");
+        const targetDivsParent = target.parentElement;
+        const taskContainer = targetDivsParent.parentElement;
+        appLogic.deleteTask(taskId);
+        taskContainer.remove();
+      })
+    );
+  };
+
+  const addEventListenerToProjectIcon = (divProjectIcon, elemId) => {
+    divProjectIcon.addEventListener("click", () => {
+      appLogic.deleteProject(elemId);
+      displayController.updateProjectsDisplay();
+    });
+  };
+
+  return { addEventListenerToTaskIcons, addEventListenerToProjectIcon };
 })();
