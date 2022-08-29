@@ -96,7 +96,7 @@ const displayController = (() => {
       const divProject = document.createElement("div");
       const divProjectText = document.createElement("div");
       const userInputField = document.getElementById("project-name");
-      const projectName = userInputField.value;
+      const projectName = element.title;
       const divProjectIcon = document.createElement("div");
       const elemId = element.id;
 
