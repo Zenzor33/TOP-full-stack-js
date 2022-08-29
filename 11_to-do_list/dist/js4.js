@@ -68,25 +68,6 @@ const displayController = (() => {
     addEventListenerToTaskIcons();
   };
 
-  const deleteProject = (projectId) => {
-    for (let i = 0; i < myProjects.length; i++) {
-      // Note the ==
-      if (projectId == myProjects[i].id) {
-        let indexValue = myProjects.indexOf(myProjects[i]);
-        myProjects.splice(indexValue, 1);
-      }
-    }
-    // delete tasks (with projectId) from myTasks array
-    for (let i = 0; i < myTasks.length; i++) {
-      if (projectId == myTasks[i].projectId) {
-        const indexValue = myTasks.indexOf(myTasks[i]);
-        myTasks.splice(indexValue, 1);
-        i--;
-      }
-    }
-    updateProjectsDisplay();
-  };
-
   const updateProjectsDisplay = () => {
     const projectsContainer = document.getElementById("projects-container");
     projectsContainer.innerHTML = "";
@@ -120,7 +101,8 @@ const displayController = (() => {
       divProjectIcon.classList.add("project-icon");
       divProjectIcon.innerText = "[trash-icon]";
       divProjectIcon.addEventListener("click", () => {
-        deleteProject(elemId);
+        appLogic.deleteTheProject(elemId);
+        updateProjectsDisplay();
       });
 
       divProject.appendChild(divProjectText);
@@ -136,6 +118,23 @@ const displayController = (() => {
 })();
 
 const appLogic = (() => {
+  const deleteTheProject = (projectId) => {
+    for (let i = 0; i < myProjects.length; i++) {
+      // Note the ==
+      if (projectId == myProjects[i].id) {
+        let indexValue = myProjects.indexOf(myProjects[i]);
+        myProjects.splice(indexValue, 1);
+      }
+    }
+    // delete tasks (with projectId) from myTasks array
+    for (let i = 0; i < myTasks.length; i++) {
+      if (projectId == myTasks[i].projectId) {
+        const indexValue = myTasks.indexOf(myTasks[i]);
+        myTasks.splice(indexValue, 1);
+        i--;
+      }
+    }
+  };
   const projectFactory = (title) => {
     this.id = counts();
     this.title = title;
@@ -185,7 +184,7 @@ const appLogic = (() => {
     ]);
     displayController.updateProjectsDisplay();
   };
-  return { createProject, createTask };
+  return { createProject, createTask, deleteTheProject };
 })();
 
 const eventHandler = (() => {
