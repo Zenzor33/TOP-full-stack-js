@@ -1,3 +1,7 @@
+/*
+Make code more concise
+*/
+
 const displayController = (() => {
   const changeDisplayType = (displayType, ...ElementId) => {
     const arr = ElementId;
@@ -9,9 +13,11 @@ const displayController = (() => {
     element2.style.display = displayType;
   };
 
-  const updateTasksDisplay = (myTasks, selectedProjectId) => {
+  const updateTasksDisplay = (myTasks) => {
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
+    const selectedProject = document.querySelector(".highlight");
+    const selectedProjectId = selectedProject.id;
 
     // need variable for highlighted/selected project id
     myTasks.forEach((task) => {
@@ -37,7 +43,7 @@ const displayController = (() => {
         container.appendChild(divTask);
       }
     });
-    eventHandler.addEventListenerToTaskIcons();
+    eventHandler.addEventListenerToTaskTrashIcons();
   };
 
   const updateProjectsDisplay = (myProjects) => {
@@ -83,7 +89,7 @@ const displayController = (() => {
 
 const appLogic = (() => {
   const myProjects = [];
-  const myTasks = [];
+  let myTasks = [];
   let count = 0;
 
   const counts = () => {
@@ -91,14 +97,20 @@ const appLogic = (() => {
     return count;
   };
 
-  const deleteTask = (taskId) => {
-    for (let i = 0; i < myTasks.length; i++) {
-      if (taskId == myTasks[i].taskId) {
-        const index = myTasks.indexOf(myTasks[i]);
-        myTasks.splice(index, 1);
-        i--;
-      }
-    }
+  // Use ES6
+  const deleteTask = (taskIconId) => {
+    console.log(taskIconId);
+    const newArray = myTasks.filter((task) => taskIconId != task.taskId);
+    console.log(JSON.stringify(newArray));
+    appLogic.myTasks = newArray;
+    // displayController.updateTasksDisplay(myTasks);
+    // for (let i = 0; i < myTasks.length; i++) {
+    //   if (taskIconId == myTasks[i].taskId) {
+    //     const index = myTasks.indexOf(myTasks[i]);
+    //     myTasks.splice(index, 1);
+    //     i--;
+    //   }
+    // }
   };
   const deleteProject = (projectId) => {
     for (let i = 0; i < myProjects.length; i++) {
@@ -123,7 +135,7 @@ const appLogic = (() => {
     return { id, title };
   };
 
-  const taskFactory = (projectId, taskTitle, description, notes, dueDate) => {
+  const taskFactory = (projectId, taskTitle, description, notes) => {
     this.projectId = projectId;
     this.taskId = counts();
     this.taskTitle = taskTitle;
@@ -148,7 +160,7 @@ const appLogic = (() => {
       "page-mask-task",
     ]);
     // update dom
-    displayController.updateTasksDisplay(myTasks, projectId);
+    displayController.updateTasksDisplay(myTasks);
   };
 
   const createProject = (e) => {
@@ -173,6 +185,7 @@ const appLogic = (() => {
     deleteTask,
     myProjects,
     myTasks,
+    counts,
   };
 })();
 
@@ -211,7 +224,7 @@ const eventHandler = (() => {
   btnSubmitProject.addEventListener("click", appLogic.createProject);
   btnSubmitTask.addEventListener("click", appLogic.createTask);
 
-  const addEventListenerToTaskIcons = () => {
+  const addEventListenerToTaskTrashIcons = () => {
     const targetDivs = document.querySelectorAll(".task-icon-trash");
 
     targetDivs.forEach((element) =>
@@ -238,12 +251,12 @@ const eventHandler = (() => {
       const divPrevSelected = document.querySelector(".highlight");
       if (divPrevSelected) divPrevSelected.classList.remove("highlight");
       divProject.classList.add("highlight");
-      displayController.updateTasksDisplay(appLogic.myTasks, divProject.id);
+      displayController.updateTasksDisplay(appLogic.myTasks);
     });
   };
 
   return {
-    addEventListenerToTaskIcons,
+    addEventListenerToTaskTrashIcons,
     addEventListenerToProjectTrashIcon,
     addEventListenerToHighlightProjectDiv,
   };
