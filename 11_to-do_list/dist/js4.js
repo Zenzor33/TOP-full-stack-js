@@ -1,18 +1,3 @@
-/*
-Remove global variables myProjects and myTasks.
-- Store them in appLogic
-- Pass them as parameters into updateTasksDisplay and updateProjectsDisplay
-
-*/
-
-const myTasks = [];
-
-let count = 0;
-const counts = () => {
-  count++;
-  return count;
-};
-
 const displayController = (() => {
   const changeDisplayType = (displayType, ...ElementId) => {
     const arr = ElementId;
@@ -24,12 +9,13 @@ const displayController = (() => {
     element2.style.display = displayType;
   };
 
-  const updateTasksDisplay = (projectId) => {
+  const updateTasksDisplay = (myTasks, selectedProjectId) => {
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
 
+    // need variable for highlighted/selected project id
     myTasks.forEach((task) => {
-      if (task.projectId == projectId) {
+      if (task.projectId == selectedProjectId) {
         const container = document.getElementById("tasks-container");
         const divTask = document.createElement("div");
 
@@ -62,7 +48,6 @@ const displayController = (() => {
       const container = document.getElementById("projects-container");
       const divProject = document.createElement("div");
       const divProjectText = document.createElement("div");
-      const userInputField = document.getElementById("project-name");
       const projectName = element.title;
       const divProjectIcon = document.createElement("div");
       const elemId = element.id;
@@ -71,12 +56,8 @@ const displayController = (() => {
       divProject.setAttribute("id", element.id); // probably??
 
       // Handles the highlighting and unhighlighting of the new div
-      divProject.addEventListener("click", () => {
-        const divPrevSelected = document.querySelector(".highlight");
-        if (divPrevSelected) divPrevSelected.classList.remove("highlight");
-        divProject.classList.add("highlight");
-        updateTasksDisplay(element.id);
-      });
+      eventHandler.addEventListenerToHighlightProjectDiv(divProject);
+
       // Styles the font of text in the div
       divProjectText.classList.add("project-text");
 
@@ -86,7 +67,7 @@ const displayController = (() => {
       // Creates trash icon and adds event listener
       divProjectIcon.classList.add("project-icon");
       divProjectIcon.innerText = "[trash-icon]";
-      eventHandler.addEventListenerToProjectIcon(divProjectIcon, elemId);
+      eventHandler.addEventListenerToProjectTrashIcon(divProjectIcon, elemId);
 
       divProject.appendChild(divProjectText);
       divProject.appendChild(divProjectIcon);
@@ -102,6 +83,14 @@ const displayController = (() => {
 
 const appLogic = (() => {
   const myProjects = [];
+  const myTasks = [];
+  let count = 0;
+
+  const counts = () => {
+    count++;
+    return count;
+  };
+
   const deleteTask = (taskId) => {
     for (let i = 0; i < myTasks.length; i++) {
       if (taskId == myTasks[i].taskId) {
@@ -159,7 +148,7 @@ const appLogic = (() => {
       "page-mask-task",
     ]);
     // update dom
-    displayController.updateTasksDisplay(projectId);
+    displayController.updateTasksDisplay(myTasks, projectId);
   };
 
   const createProject = (e) => {
@@ -177,7 +166,14 @@ const appLogic = (() => {
     ]);
     displayController.updateProjectsDisplay(myProjects);
   };
-  return { createProject, createTask, deleteProject, deleteTask, myProjects };
+  return {
+    createProject,
+    createTask,
+    deleteProject,
+    deleteTask,
+    myProjects,
+    myTasks,
+  };
 })();
 
 const eventHandler = (() => {
@@ -230,12 +226,25 @@ const eventHandler = (() => {
     );
   };
 
-  const addEventListenerToProjectIcon = (divProjectIcon, elemId) => {
+  const addEventListenerToProjectTrashIcon = (divProjectIcon, elemId) => {
     divProjectIcon.addEventListener("click", () => {
       appLogic.deleteProject(elemId);
       displayController.updateProjectsDisplay(appLogic.myProjects);
     });
   };
 
-  return { addEventListenerToTaskIcons, addEventListenerToProjectIcon };
+  const addEventListenerToHighlightProjectDiv = (divProject) => {
+    divProject.addEventListener("click", () => {
+      const divPrevSelected = document.querySelector(".highlight");
+      if (divPrevSelected) divPrevSelected.classList.remove("highlight");
+      divProject.classList.add("highlight");
+      displayController.updateTasksDisplay(appLogic.myTasks, divProject.id);
+    });
+  };
+
+  return {
+    addEventListenerToTaskIcons,
+    addEventListenerToProjectTrashIcon,
+    addEventListenerToHighlightProjectDiv,
+  };
 })();
