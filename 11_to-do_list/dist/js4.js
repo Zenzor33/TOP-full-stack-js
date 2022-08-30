@@ -14,6 +14,7 @@ const displayController = (() => {
   };
 
   const updateTasksDisplay = (myTasks) => {
+    // console.log(`updateTasksDisplay myTasks = ${myTasks}`);
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
     const selectedProject = document.querySelector(".highlight");
@@ -99,10 +100,10 @@ const appLogic = (() => {
 
   // Use ES6
   const deleteTask = (taskIconId) => {
-    console.log(taskIconId);
-    const newArray = myTasks.filter((task) => taskIconId != task.taskId);
-    console.log(JSON.stringify(newArray));
-    appLogic.myTasks = newArray;
+    // console.log(taskIconId);
+    let newArr = myTasks.filter((task) => taskIconId != task.taskId);
+    appLogic.myTasks = newArr;
+    // console.log(JSON.stringify(newArray));
     // displayController.updateTasksDisplay(myTasks);
     // for (let i = 0; i < myTasks.length; i++) {
     //   if (taskIconId == myTasks[i].taskId) {
@@ -234,7 +235,7 @@ const eventHandler = (() => {
         const targetDivsParent = target.parentElement;
         const taskContainer = targetDivsParent.parentElement;
         appLogic.deleteTask(taskId);
-        taskContainer.remove();
+        displayController.updateTasksDisplay(appLogic.myTasks);
       })
     );
   };
