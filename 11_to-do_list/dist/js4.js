@@ -1,4 +1,10 @@
-const myProjects = [];
+/*
+Remove global variables myProjects and myTasks.
+- Store them in appLogic
+- Pass them as parameters into updateTasksDisplay and updateProjectsDisplay
+
+*/
+
 const myTasks = [];
 
 let count = 0;
@@ -48,7 +54,7 @@ const displayController = (() => {
     eventHandler.addEventListenerToTaskIcons();
   };
 
-  const updateProjectsDisplay = () => {
+  const updateProjectsDisplay = (myProjects) => {
     const projectsContainer = document.getElementById("projects-container");
     projectsContainer.innerHTML = "";
 
@@ -69,7 +75,7 @@ const displayController = (() => {
         const divPrevSelected = document.querySelector(".highlight");
         if (divPrevSelected) divPrevSelected.classList.remove("highlight");
         divProject.classList.add("highlight");
-        displayController.updateTasksDisplay(element.id);
+        updateTasksDisplay(element.id);
       });
       // Styles the font of text in the div
       divProjectText.classList.add("project-text");
@@ -95,6 +101,7 @@ const displayController = (() => {
 })();
 
 const appLogic = (() => {
+  const myProjects = [];
   const deleteTask = (taskId) => {
     for (let i = 0; i < myTasks.length; i++) {
       if (taskId == myTasks[i].taskId) {
@@ -168,9 +175,9 @@ const appLogic = (() => {
       "popup-project",
       "page-mask-project",
     ]);
-    displayController.updateProjectsDisplay();
+    displayController.updateProjectsDisplay(myProjects);
   };
-  return { createProject, createTask, deleteProject, deleteTask };
+  return { createProject, createTask, deleteProject, deleteTask, myProjects };
 })();
 
 const eventHandler = (() => {
@@ -226,7 +233,7 @@ const eventHandler = (() => {
   const addEventListenerToProjectIcon = (divProjectIcon, elemId) => {
     divProjectIcon.addEventListener("click", () => {
       appLogic.deleteProject(elemId);
-      displayController.updateProjectsDisplay();
+      displayController.updateProjectsDisplay(appLogic.myProjects);
     });
   };
 
