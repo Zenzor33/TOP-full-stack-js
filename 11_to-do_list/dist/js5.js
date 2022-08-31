@@ -1,7 +1,3 @@
-/*
-Make code more concise
-*/
-
 const displayController = (() => {
   const changeDisplayType = (displayType, ...ElementId) => {
     const arr = ElementId;
@@ -14,32 +10,29 @@ const displayController = (() => {
   };
 
   const updateTasksDisplay = (myTasks) => {
-    // console.log(`updateTasksDisplay myTasks = ${myTasks}`);
     const tasksContainer = document.getElementById("tasks-container");
     tasksContainer.innerHTML = "";
     const selectedProject = document.querySelector(".highlight");
-    const selectedProjectId = selectedProject.id;
 
-    // need variable for highlighted/selected project id
     myTasks.forEach((task) => {
-      if (task.projectId == selectedProjectId) {
+      if (selectedProject && task.projectId == selectedProject.id) {
         const container = document.getElementById("tasks-container");
         const divTask = document.createElement("div");
 
         divTask.classList.add("task");
         divTask.setAttribute("id", taskId);
         divTask.innerHTML = `<div class="task-title">Task title: ${task.taskTitle}</div>
-    <div class="task-description">Task description: ${task.description} </div>
-    <div class="task-due-date">Task due date:</div>
-    <div class="task-priority">Task priority:</div>
-    <div class="task-notes">Task notes: ${task.notes} </div>
-    <div class="task-projectId">Project Id: ${task.projectId}</div>
-    <div class="taskID">Task Id: ${task.taskId} </div>
-    <div class="task-icon-container">
-      <div class="task-icon-edit">[edit icon]</div>
-      <div class="task-icon-trash" data-taskid="${task.taskId}">[trash icon]</div>
-    </div>
-  </div>`;
+      <div class="task-description">Task description: ${task.description} </div>
+      <div class="task-due-date">Task due date:</div>
+      <div class="task-priority">Task priority:</div>
+      <div class="task-notes">Task notes: ${task.notes} </div>
+      <div class="task-projectId">Project Id: ${task.projectId}</div>
+      <div class="taskID">Task Id: ${task.taskId} </div>
+      <div class="task-icon-container">
+        <div class="task-icon-edit">[edit icon]</div>
+        <div class="task-icon-trash" data-taskid="${task.taskId}">[trash icon]</div>
+      </div>
+    </div>`;
 
         container.appendChild(divTask);
       }
@@ -89,8 +82,6 @@ const displayController = (() => {
 })();
 
 const appLogic = (() => {
-  const myProjects = [];
-  //   let myTasks = [];
   let count = 0;
 
   const counts = () => {
@@ -98,38 +89,22 @@ const appLogic = (() => {
     return count;
   };
 
-  // Use ES6
   const deleteTask = (taskIconId) => {
-    // console.log(taskIconId);
-    let newArr = appLogic.myTasks.filter((task) => taskIconId != task.taskId);
-    // myTasks = newArr;
-    appLogic.myTasks = newArr;
-    // console.log(JSON.stringify(newArray));
-    // displayController.updateTasksDisplay(myTasks);
-    // for (let i = 0; i < myTasks.length; i++) {
-    //   if (taskIconId == myTasks[i].taskId) {
-    //     const index = myTasks.indexOf(myTasks[i]);
-    //     myTasks.splice(index, 1);
-    //     i--;
-    //   }
-    // }
+    appLogic.myTasks = appLogic.myTasks.filter(
+      (task) => taskIconId != task.taskId
+    );
   };
+
   const deleteProject = (projectId) => {
-    for (let i = 0; i < myProjects.length; i++) {
-      // Note the ==
-      if (projectId == myProjects[i].id) {
-        let indexValue = myProjects.indexOf(myProjects[i]);
-        myProjects.splice(indexValue, 1);
-      }
-    }
+    // delete projects from myProjects that match projectId
+    appLogic.myProjects = appLogic.myProjects.filter(
+      (project) => projectId != project.id
+    );
+
     // delete tasks (with projectId) from myTasks array
-    for (let i = 0; i < appLogic.length; i++) {
-      if (projectId == appLogic.myTasks[i].projectId) {
-        const indexValue = appLogic.myTasks.indexOf(appLogic.myTasks[i]);
-        appLogic.myTasks.splice(indexValue, 1);
-        i--;
-      }
-    }
+    appLogic.myTasks = appLogic.myTasks.filter(
+      (tasks) => projectId != tasks.projectId
+    );
   };
   const projectFactory = (title) => {
     this.id = counts();
@@ -171,21 +146,21 @@ const appLogic = (() => {
     const userInputField = document.getElementById("project-name");
     const projectName = userInputField.value;
     const thisProject = projectFactory(projectName);
-    myProjects.push(thisProject);
+    appLogic.myProjects.push(thisProject);
 
     // Removes the popup
     displayController.changeDisplayType("none", [
       "popup-project",
       "page-mask-project",
     ]);
-    displayController.updateProjectsDisplay(myProjects);
+    displayController.updateProjectsDisplay(appLogic.myProjects);
   };
   return {
     createProject,
     createTask,
     deleteProject,
     deleteTask,
-    myProjects,
+    myProjects: [],
     myTasks: [],
     counts,
   };
@@ -233,8 +208,6 @@ const eventHandler = (() => {
       element.addEventListener("click", (e) => {
         const target = e.target;
         const taskId = target.getAttribute("data-taskid");
-        const targetDivsParent = target.parentElement;
-        const taskContainer = targetDivsParent.parentElement;
         appLogic.deleteTask(taskId);
         displayController.updateTasksDisplay(appLogic.myTasks);
       })
