@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-mask" id="page-mask-project">
+      <div class="form-popup" id="popup-project">
+        <form action="" class="form-container">
+          <label for="project-name">Project Name:</label>
+          <input
+            type="text"
+            id="project-name"
+            placeholder="Enter project name"
+            name="project-name"
+            required
+          />
+          <br />
+
+          <button type="submit" class="btn" id="btnProjectSubmit">
+            Submit
+          </button>
+          <button type="button" class="btn cancel" id="project-btn-cancel">
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="page-mask" id="page-mask-task">
+      <div class="form-popup" id="formAddTask">
+        <form action="" class="form-container">
+          <label for="task-title">Task Title:</label>
+          <br />
+          <input
+            type="text"
+            id="task-title"
+            placeholder="Enter name"
+            name="task-title"
+            required
+          />
+          <br />
+          <label for="task-description">Description:</label>
+          <br />
+          <textarea
+            id="task-description"
+            placeholder="Enter description"
+            name="task-description"
+            rows="10"
+            cols="40"
+          ></textarea>
+          <br />
+          <label for="task-date">Due date:</label>
+          <br />
+          <input
+            type="date"
+            id="task-date"
+            placeholder="Enter date"
+            name="task-date"
+          />
+          <br />
+          <label for="task-notes">Notes:</label>
+          <br />
+          <textarea
+            id="task-notes"
+            placeholder="Enter notes"
+            name="task-notes"
+            rows="10"
+            cols="40"
+          ></textarea>
+
+          <br />
+          <br />
+          <button type="submit" class="btn" id="btnTaskSubmit">Submit</button>
+          <button type="button" class="btn cancel" id="task-btn-cancel">
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="header-left"><h1>To-Do List</h1></div>
+      <div class="header-right">
+        <div id="github">
+          <a
+            href="https://github.com/Zenzor33/TOP-full-stack-js/tree/main/11_to-do_list"
+            >Github</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-header">
+        <div class="content-left">
+          <div class="content-text" id="content-left-text">Projects</div>
+          <div class="content-button" id="content-left-button">
+            <button class="btn" id="btn-add-project">Add Project</button>
+          </div>
+        </div>
+        <div class="content-right">
+          <div class="content-text" id="content-right-text">Tasks</div>
+          <div class="content-button" id="content-right-button">
+            <button class="btn" id="btn-add-task">Add Task</button>
+          </div>
+        </div>
+      </div>
+      <div class="content-lists">
+        <div class="content-lists-left" id="projects-container"></div>
+        <div class="content-lists-right" id="tasks-container"></div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
