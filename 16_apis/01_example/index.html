@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img id="firstImage" src="#" />
+    <br />
+    <button id="btn">Click for image</button>
+    <br />
+    <img id="secondImage" src="#" />
+    <br />
+    <form action="" method="post" id="myForm" name="myForm">
+      <label for="search">Enter keyword</label>
+      <input type="text" name="search" id="search" />
+      <button type="submit"></button>
+    </form>
+    <br />
+    <img src="" id="thirdImage" />
+    <script>
+      const btnNewImage = document.querySelector("#btn");
+      const form = document.getElementById("myForm");
+      const img = document.querySelector("#firstImage");
+      const img2 = document.querySelector("#secondImage");
+      const img3 = document.querySelector("#thirdImage");
+
+      fetch(
+        "https://api.giphy.com/v1/gifs/translate?api_key=WTXfvYVEPLDiKYTcKvVvQcNaI2ylNe8G&s=cats",
+        { mode: "cors" }
+      )
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (response) {
+          img.src = response.data.images.original.url;
+        });
+      btnNewImage.addEventListener("click", generateNewImage);
+      function generateNewImage() {
+        fetch(
+          "https://api.giphy.com/v1/gifs/translate?api_key=WTXfvYVEPLDiKYTcKvVvQcNaI2ylNe8G&s=cats",
+          { mode: "cors" }
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (response) {
+            img2.src = response.data.images.original.url;
+          });
+      }
+      myForm.addEventListener("submit", something);
+      function something(e) {
+        e.preventDefault();
+        const searchValue = document.forms["myForm"].elements["search"].value;
+        searchForImage(searchValue);
+      }
+      function searchForImage(searchValue) {
+        fetch(
+          `https://api.giphy.com/v1/gifs/search?api_key=WTXfvYVEPLDiKYTcKvVvQcNaI2ylNe8G&q=${searchValue}`,
+          { mode: "cors" }
+        )
+          .then(function (response) {
+            // console.log(response.json());
+            return response.json();
+          })
+          .then(function (response) {
+            console.log(response.data[0].images.original.url);
+            img3.src = response.data[0].images.original.url;
+          })
+          .catch(function (error) {
+            console.log("oops");
+          });
+      }
+    </script>
+  </body>
+</html>
+
+<!-- API key: WTXfvYVEPLDiKYTcKvVvQcNaI2ylNe8G -->
