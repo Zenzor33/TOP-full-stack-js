@@ -91,3 +91,114 @@ function productOfArray(arr, total = 1) {
 
 let answer = productOfArray(someArr);
 console.log(answer);
+
+/*
+Question 6: Search JS object
+Write a function called contains that searches for a value in a nested object. It returns true if the object contains that value.
+
+Sample:
+
+var nestedObject = {
+    data: {
+        info: {
+            stuff: {
+                thing: {
+                    moreStuff: {
+                        magicNumber: 44,
+                        something: 'foo2'
+                    }
+                }
+            }
+        }
+    }
+}
+
+let hasIt = contains(nestedObject, 44); // true
+let doesntHaveIt = contains(nestedObject, "foo"); // false
+*/
+
+let nestedObject = {
+  data: {
+    info: {
+      stuff: {
+        thing: {
+          moreStuff: {
+            magicNumber: 44,
+            something: "foo2",
+          },
+        },
+      },
+    },
+  },
+};
+
+// let hasIt = contains(nestedObject, 44); // true
+// let doesntHaveIt = contains(nestedObject, "foo"); // false
+// console.log(hasIt, doesntHaveIt);
+
+function contains(obj, value) {
+  for (var key in obj) {
+    console.log(key, obj);
+    return contains(obj[key], value);
+  }
+}
+
+/*
+Question 7: Parse a multi-dimensional array
+Given a multi-dimensional integer array, return the total number of integers stored inside this array
+
+Sample:
+
+var seven = totalIntegers([[[5], 3], 0, 2, ['foo'], [], [4, [5, 6]]]); // 7
+*/
+
+var seven = totalIntegers([[[5], 3], 0, 2, ["foo"], [], [4, [5, 6]]]); // 7
+
+function totalIntegers(arr, total = 0) {
+  for (let i = 0; i < arr.length; i++) {
+    // if array length = 0, exit
+    // if array[i].length > 0, return totalIntegers(arr[i], total)
+    if (arr[i].length > 0) {
+      for (let j = 0; j < arr[i].length; j++)
+        return totalIntegers(arr[i], total);
+    }
+    // if array[i].length is undefined, total+1
+    if (!Boolean(arr[i].length)) {
+      total += 1;
+    }
+  }
+  return total;
+}
+
+const six = [[[5], 3], 0, 2, ["foo"], [], [4, [5, 6]]];
+
+/*
+Using iteration, write a function fibs which takes a number and returns an array containing that many numbers from the fibonacci sequence. Using an example input of 8, this method should return the array [0, 1, 1, 2, 3, 5, 8, 13].
+*/
+
+function fibs(n) {
+  let arr = [];
+  for (let i = 0; i < n; i++) {
+    if (i === 0) {
+      arr.push(0);
+    }
+    if (i === 1) {
+      arr.push(1);
+    }
+    if (i > 1) {
+      arr.push(arr[i - 2] + arr[i - 1]);
+    }
+  }
+  return arr;
+}
+
+/*
+Now write another method fibsRec which solves the same problem recursively. This can be done in just a couple of lines (or 1 if you’re crazy, but don’t consider either of these lengths a requirement… just get it done).
+*/
+
+function fibsRec(n, arr = [0, 1]) {
+  if (n === 2) return arr;
+  arr.push(arr[arr.length - 1] + arr[arr.length - 2]);
+  let newArr = arr;
+  return fibsRec(n - 1, newArr);
+}
