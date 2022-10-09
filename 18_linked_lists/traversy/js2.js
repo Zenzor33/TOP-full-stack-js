@@ -11,6 +11,24 @@ class LinkedList {
     this.size = 0;
   }
 
+  // 9. find(value) returns the index of the node containing value, or null if not found.
+
+  find(val) {
+    let index = 0;
+    // return index of node containing the value
+    // loop through each node. if node contains value, return index of that node.
+    let current = this.head;
+    while (current) {
+      // console.log(current.data);
+      if (current.data === val) {
+        return index;
+      } else {
+        current = current.next;
+        index++;
+      }
+    }
+  }
+
   // 8. contains(value) returns true if the passed in value is in the list and otherwise returns false.
 
   contains(val) {
